@@ -1,0 +1,30 @@
+# Machine-readable numeric support for the manuscript.
+#
+# Each row is keyed on the claim, not on the bare integer. Every row is
+# re-derived from the running package by tests/test_claim_ledger.py, which
+# also refuses a row with no derivation and a derivation with no row.
+# `source_tier` is `test` for every row, because every row has an
+# executable derivation.
+schema: green-line-claim-ledger-v1
+claims:
+  - {claim_id: record-count, kind: number, value: 11, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: growth-family-count, kind: number, value: 6, source: tests/test_claim_ledger.py, artifact_path: src/green_line/enums.py, source_tier: test}
+  - {claim_id: tag-vocabulary-size, kind: number, value: 6, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: distinct-marker-count, kind: number, value: 22, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: applicable-tag-record-cells, kind: number, value: 29, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: tag-record-cell-total, kind: number, value: 66, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: analysis-tag-reach, kind: number, value: 6, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: analysis-marker-burden, kind: number, value: 12, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: data-tag-reach, kind: number, value: 1, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: data-marker-burden, kind: number, value: 2, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: engineering-tag-reach, kind: number, value: 5, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: engineering-marker-burden, kind: number, value: 10, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: research-tag-reach, kind: number, value: 7, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: research-marker-burden, kind: number, value: 14, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: teaching-tag-reach, kind: number, value: 5, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: teaching-marker-burden, kind: number, value: 10, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: writing-tag-reach, kind: number, value: 5, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: writing-marker-burden, kind: number, value: 10, source: tests/test_claim_ledger.py, artifact_path: src/green_line/registry.py, source_tier: test}
+  - {claim_id: counter-signal-phrase-count, kind: number, value: 8, source: tests/test_claim_ledger.py, artifact_path: src/green_line/intake.py, source_tier: test}
+  - {claim_id: figure-count, kind: number, value: 3, source: tests/test_claim_ledger.py, artifact_path: src/green_line/figures/__init__.py, source_tier: test}
+  - {claim_id: digest-hex-length, kind: number, value: 64, source: tests/test_claim_ledger.py, artifact_path: src/green_line/serialization.py, source_tier: test}

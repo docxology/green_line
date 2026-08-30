@@ -1,0 +1,106 @@
+{
+ "schema_version": "1.0",
+ "purpose": "Declares the manuscript's formalism-block labels so the render engine's evidence registry can resolve a [@def:...]/[@prop:...] cross-reference instead of reporting it as an unsupported citation.",
+ "boundary": "A row here records that a label is declared. It is not evidence that the proposition it names is true.",
+ "claims": [
+  {
+   "claim_id": "def_aggregation",
+   "kind": "citation",
+   "value": "def:aggregation",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  },
+  {
+   "claim_id": "def_applicability",
+   "kind": "citation",
+   "value": "def:applicability",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  },
+  {
+   "claim_id": "def_attempt",
+   "kind": "citation",
+   "value": "def:attempt",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  },
+  {
+   "claim_id": "def_counter_signal",
+   "kind": "citation",
+   "value": "def:counter-signal",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  },
+  {
+   "claim_id": "def_finding_rule",
+   "kind": "citation",
+   "value": "def:finding-rule",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  },
+  {
+   "claim_id": "def_freshness",
+   "kind": "citation",
+   "value": "def:freshness",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  },
+  {
+   "claim_id": "def_growth_record",
+   "kind": "citation",
+   "value": "def:growth-record",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  },
+  {
+   "claim_id": "def_tag_vocabulary",
+   "kind": "citation",
+   "value": "def:tag-vocabulary",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  },
+  {
+   "claim_id": "prop_determinism",
+   "kind": "citation",
+   "value": "prop:determinism",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  },
+  {
+   "claim_id": "prop_empty_scope",
+   "kind": "citation",
+   "value": "prop:empty-scope",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  },
+  {
+   "claim_id": "prop_fail_closed",
+   "kind": "citation",
+   "value": "prop:fail-closed",
+   "source": "manuscript/03_formalism.md: block declared with this label",
+   "source_path": "manuscript/03_formalism.md",
+   "source_tier": "manuscript_formalism_block",
+   "freshness": "active"
+  }
+ ]
+}

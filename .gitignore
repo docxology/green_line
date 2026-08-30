@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+output/
+uv.lock
+.coverage
+htmlcov/
+MDEOF
+echo data-docs ok

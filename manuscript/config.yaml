@@ -1,0 +1,19 @@
+paper:
+  title: "Green Line: a capacity-under-development instrument"
+  version: "1.0"
+authors:
+  - name: "Daniel Ari Friedman"
+    orcid: "0000-0001-6232-9096"
+    email: "daniel@activeinference.institute"
+    affiliation: "Active Inference Institute"
+    corresponding: true
+publication:
+  doi: ""
+keywords:
+  - "active inference"
+  - "governance"
+  - "apprenticeship"
+  - "growth records"
+metadata:
+  license: "Apache-2.0"
+  language: "en"
