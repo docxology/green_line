@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 
 import pytest
 
@@ -83,6 +83,8 @@ def test_resolve_read_date_forms() -> None:
     assert resolve_read_date(date(2026, 8, 29)) == date(2026, 8, 29)
     with pytest.raises(TypeError):
         resolve_read_date(42)  # type: ignore[arg-type]
+    with pytest.raises(TypeError):
+        resolve_read_date(datetime(2026, 8, 29))  # type: ignore[arg-type]
 
 
 def test_resolve_max_age_forms() -> None:
@@ -117,3 +119,29 @@ def test_registry_shape_error_paths() -> None:
 
 def test_counter_signal_phrase_count_is_derivable() -> None:
     assert len(COUNTER_SIGNAL_PHRASES) == 8
+
+
+def test_counter_signal_labels_are_staged_aside() -> None:
+    fresh, stale, notes = dated_labels(
+        (Observation("certified expert", None),), date(2026, 8, 29), 60
+    )
+    assert not fresh and not stale
+    assert any("counter-signals" in note for note in notes)
+
+
+def test_dated_label_without_usable_label_is_ignored() -> None:
+    fresh, stale, notes = dated_labels(
+        (Observation("   ", None),), date(2026, 8, 29), 60
+    )
+    assert not fresh and not stale
+    assert any("without a usable label" in note for note in notes)
+
+
+def test_registry_shape_error_duplicate_id() -> None:
+    from green_line import GREEN_RECORDS, GreenRecord
+
+    ok = GREEN_RECORDS[0]
+    duplicate = GreenRecord(
+        ok.id, "same id", "w", frozenset({"research"}), ("m",)
+    )
+    assert "duplicate id" in (registry_shape_error((ok, duplicate)) or "")

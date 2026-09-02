@@ -171,3 +171,54 @@ def test_dated_evidence_not_a_collection() -> None:
         GrowthStatus.OUTSIDE_SCOPE,
         GrowthStatus.NEEDS_REWORK,
     )
+
+
+def test_non_iterable_records_fail_closed() -> None:
+    with pytest.raises(TypeError, match="records must be an iterable"):
+        read_cultivation(
+            CultivationAttempt(description="x", tags=frozenset({"research"})),
+            42,  # type: ignore[arg-type]
+            as_of="2026-08-29",
+        )
+
+
+def test_registry_digest_failure_fails_closed_with_note() -> None:
+    from green_line import GreenRecord
+
+    class _HostileRecord(GreenRecord):
+        """Shape-valid, but canonicalization always raises ValueError."""
+
+        def canonical(self) -> dict[str, object]:
+            raise ValueError("hostile canonicalization")
+
+    hostile = _HostileRecord(
+        "hostile", "t", "w", frozenset({"research"}), ("m",)
+    )
+    reading = read_cultivation(
+        CultivationAttempt(description="x", tags=frozenset({"research"})),
+        (hostile,),
+        as_of="2026-08-29",
+    )
+    assert reading.status is GrowthStatus.NEEDS_REWORK
+    assert reading.findings == ()
+    assert any("could not be digested" in note for note in reading.intake_notes)
+
+
+def test_present_markers_reason_lists_partially_covered() -> None:
+    # apprentice-review needs (mentor, session_log); one fresh marker only
+    reading = read_cultivation(
+        CultivationAttempt(
+            description="partial coverage",
+            tags=frozenset({"research"}),
+            dated_observations=(Observation("mentor", "2026-08-20"),),
+        ),
+        as_of="2026-08-29",
+    )
+    apprentice = next(
+        f for f in reading.findings if f.record_id == "apprentice-review"
+    )
+    assert apprentice.status is SignalStatus.NEEDS_REWORK
+    assert any(
+        reason.startswith("markers already present: mentor")
+        for reason in apprentice.reasons
+    )
