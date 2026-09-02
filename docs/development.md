@@ -22,5 +22,5 @@ uv run pytest tests/test_formalism_claim_ledger.py
   structure validation against a frozen schema copy.
 - `data/` — claim ledger, formalism ledger (generated), envelopes, binding
   declaration.
-- `manuscript/` — the instrument's own paper, including a formalism file
+- `docs/manuscript/` — the instrument's own paper, including a formalism file
   with `::: {#def:/prop:...}` blocks.

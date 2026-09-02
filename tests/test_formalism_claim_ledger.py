@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-MANUSCRIPT = ROOT / "manuscript"
+MANUSCRIPT = ROOT / "docs" / "manuscript"
 LEDGER = ROOT / "data" / "formalism_claim_ledger.json"
 
 _BLOCK = re.compile(r"^::: \{(?P<attrs>[^}]*)\}\s*$", re.M)

@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MANUSCRIPT = ROOT / "manuscript"
+MANUSCRIPT = ROOT / "docs" / "manuscript"
 OUT = ROOT / "data" / "formalism_claim_ledger.json"
 
 BLOCK = re.compile(r"^::: \{(?P<attrs>[^}]*)\}\s*$", re.M)
@@ -28,8 +28,8 @@ for label in sorted(labels):
             "claim_id": label.replace(":", "_").replace("-", "_"),
             "kind": "citation",
             "value": label,
-            "source": "manuscript/03_formalism.md: block declared with this label",
-            "source_path": "manuscript/03_formalism.md",
+            "source": "docs/manuscript/03_formalism.md: block declared with this label",
+            "source_path": "docs/manuscript/03_formalism.md",
             "source_tier": "manuscript_formalism_block",
             "freshness": "active",
         }
