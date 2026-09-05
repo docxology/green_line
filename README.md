@@ -44,3 +44,19 @@ uv run python scripts/build_figures.py
 
 Standalone by contract: no sibling line, the reader, or the witness register
 is needed for any of these commands. See STANDALONE.md.
+
+## The Line Set
+
+This work is one of ten in the Line Set family — eight instruments, their
+cross-line reader, and the witness register that co-registers their report
+envelopes without aggregation:
+
+- [Black Line](https://github.com/docxology/black_line) — the practice registry of realized craft
+- [Golden Line](https://github.com/docxology/golden_line) — the aspiration and horizon registry
+- [Red Line](https://github.com/docxology/red_line) — the cognitive-security registry of self-assessments
+- [White Line](https://github.com/docxology/white_line) — the absence and omission ledger
+- [Silver Line](https://github.com/docxology/silver_line) — the memory-and-succession instrument
+- [Violet Line](https://github.com/docxology/violet_line) — the consent ledger of affected parties
+- [Blue Line](https://github.com/docxology/blue_line) — the stewardship instrument for maintained commitments
+- [The Line Set](https://github.com/docxology/line_set) — the cross-line set reader holding instruments apart
+- [The Witness Register](https://github.com/docxology/witness_register) — co-registration without aggregation

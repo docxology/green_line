@@ -1,0 +1,77 @@
+{
+  "title": "Green Line: a capacity-under-development instrument",
+  "description": "<p>A capacity-under-development instrument: the green line of the docxology line-set. It records what is deliberately still being learned — apprenticeships, skills not yet mastered — with marker/counter-signal staging, and reads declared growth records against a versioned registry. Observations phrased as certification or credential language are staged aside with a note, never scored. It measures what is still growing — never competence, mastery, or virtue.</p><p>Code and prose are Apache-2.0 licensed. See LICENSE in the repository.</p>",
+  "upload_type": "publication",
+  "publication_type": "workingpaper",
+  "creators": [
+    {
+      "name": "Friedman, Daniel Ari",
+      "affiliation": "Active Inference Institute",
+      "orcid": "0000-0001-6232-9096"
+    }
+  ],
+  "license": "Apache-2.0",
+  "access_right": "open",
+  "version": "0.1.0",
+  "keywords": [
+    "active inference",
+    "governance",
+    "apprenticeship",
+    "growth records",
+    "capacity under development",
+    "open science"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/docxology/green_line",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/black_line",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/golden_line",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/red_line",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/white_line",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/silver_line",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/violet_line",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/blue_line",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/line_set",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/witness_register",
+      "relation": "references",
+      "scheme": "url"
+    }
+  ],
+  "notes": "One of ten related works (the Line Set family: eight instruments, the cross-line reader, and the witness register). No DOIs have been minted for this work or its siblings, so related works are linked by repository URL and no doi field is present; this work's DOI will be recorded in CITATION.cff identifiers and the record link when minted."
+}

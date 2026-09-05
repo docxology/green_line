@@ -1,6 +1,9 @@
 paper:
   title: "Green Line: a capacity-under-development instrument"
   version: "1.0"
+  cover:
+    image: "../../output/figures/green_line_cover.png"
+
 authors:
   - name: "Daniel Ari Friedman"
     orcid: "0000-0001-6232-9096"

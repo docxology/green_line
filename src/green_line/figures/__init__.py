@@ -5,6 +5,8 @@ from __future__ import annotations
 import hashlib
 import html
 import json
+import shutil
+import subprocess
 from pathlib import Path
 
 from green_line import (
@@ -76,6 +78,8 @@ def text(
     weight: str = "400",
     family: str = BODY_FONT,
     italic: bool = False,
+    anchor: str = "",
+    letter_spacing: int = 0,
 ) -> str:
     size = max(size, MIN_FONT)
     attrs = [
@@ -88,8 +92,11 @@ def text(
     ]
     if italic:
         attrs.append('font-style="italic"')
+    if anchor:
+        attrs.append(f'text-anchor="{anchor}"')
+    if letter_spacing:
+        attrs.append(f'letter-spacing="{letter_spacing}px"')
     return "<text " + " ".join(attrs) + ">" + esc(value) + "</text>"
-
 
 def headline(x: float, y: float, value: str, *, size: int = 28) -> str:
     return text(x, y, value, size=size, weight="700", family=TITLE_FONT, italic=True)
@@ -357,6 +364,113 @@ def status_flow_svg() -> str:
     )
 
 
+
+COVER_NAME = "green_line_cover"
+
+
+def green_line_cover_svg() -> str:
+    """The cover plate: growth drawn with its unrealized continuation visible.
+
+    A capacity-under-development instrument, so the dominant green stroke
+    rises and then thins into a dashed ghost with hollow markers: the path
+    is announced, not yet realized. The only text is the small-caps title
+    top-left and the small-caps tagline bottom-right — no dates, no versions.
+    """
+
+    width, height = 1400, 1100
+    body = [
+        f'<rect width="{width}" height="{height}" fill="{PAPER}"/>',
+        # Thin rule frame set inside the canvas edge.
+        '<rect x="42" y="42" width="1316" height="1016" rx="0" '
+        f'fill="none" stroke="{GRID}" stroke-width="2"/>',
+        # Small-caps title, top-left, set in the title serif.
+        text(
+            92,
+            148,
+            "GREEN LINE",
+            size=44,
+            weight="700",
+            family=TITLE_FONT,
+            letter_spacing=10,
+        ),
+        # A short rule under the title, drawn in the work's own green.
+        f'<line x1="94" y1="176" x2="470" y2="176" stroke="{GREEN}" stroke-width="3"/>',
+    ]
+
+    # The realized ascent: one thick stroke from the lower left, carrying
+    # solid markers for each stage already walked.
+    realized = "M 130 930 C 330 900 480 800 650 710 C 820 620 940 560 1060 480"
+    body.append(
+        f'<path d="{realized}" fill="none" stroke="{DARK_GREEN}" '
+        'stroke-width="15" stroke-linecap="round"/>'
+    )
+    for index, (x, y) in enumerate(
+        (
+            (130, 930),
+            (316, 880),
+            (484, 800),
+            (650, 710),
+            (805, 628),
+            (938, 555),
+            (1060, 480),
+        )
+    ):
+        body.append(
+            f'<circle cx="{x}" cy="{y}" r="{15 - index}" fill="{GREEN}" '
+            f'stroke="{PAPER}" stroke-width="3"/>'
+        )
+    # The continuation is announced but not realized: dashed, thinner, with
+    # hollow markers where capacity is still under development.
+    body.append(
+        '<path d="M 1060 480 C 1160 404 1230 356 1298 300" fill="none" '
+        f'stroke="{GREEN}" stroke-width="6" stroke-linecap="round" '
+        'stroke-dasharray="5 19" opacity="0.6"/>'
+    )
+    for x, y in ((1136, 428), (1222, 362), (1298, 300)):
+        body.append(
+            f'<circle cx="{x}" cy="{y}" r="10" fill="{PAPER}" stroke="{GREEN}" '
+            'stroke-width="3" opacity="0.9"/>'
+        )
+
+    # Muted companions: faint practice ticks along the base, the ground the
+    # growth is recorded against.
+    for index in range(14):
+        x = 130 + index * 84
+        tick = 26 + (index % 3) * 8
+        body.append(
+            f'<line x1="{x}" y1="976" x2="{x}" y2="{976 - tick}" '
+            f'stroke="{GRID}" stroke-width="3" opacity="0.8"/>'
+        )
+
+    # Small-caps tagline, bottom-right.
+    body.append(
+        text(
+            1308,
+            1014,
+            "CAPACITY UNDER DEVELOPMENT",
+            size=25,
+            weight="700",
+            fill=DARK_GREEN,
+            anchor="end",
+            letter_spacing=6,
+        )
+    )
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" width="' + str(width) + '" height="'
+        + str(height) + '" viewBox="0 0 ' + str(width) + " " + str(height)
+        + '" role="img" aria-labelledby="cover-title cover-desc">'
+        + '<title id="cover-title">Green Line: capacity under development</title>'
+        + '<desc id="cover-desc">On a pale green cream field inside a thin rule '
+        "frame, a thick green stroke rises from the lower left through six solid "
+        "markers and continues as a dashed line through three hollow markers, "
+        "with faint practice ticks along the base; the small-caps title Green "
+        "Line sits top-left and the small-caps tagline Capacity Under "
+        'Development sits bottom-right.</desc>'
+        + "".join(body)
+        + "</svg>"
+    )
+
+
 def figure_registry() -> dict:
     """The derived figure registry, deterministic and digest-pinned."""
 
@@ -391,16 +505,38 @@ def figure_registry() -> dict:
                 "interpretive_claim": "shows the projection rules the evaluator applies",
                 "epistemic_boundary": "statuses are coverage projections, not judgments of persons",
             },
+            {
+                "name": COVER_NAME,
+                "label": "Cover plate",
+                "caption": "Cover plate showing growth drawn with its unrealized continuation left visible",
+                "alt": "A thick green stroke rises through six solid markers and continues as a dashed line through three hollow markers, on a cream field inside a thin rule frame, titled Green Line and tagged Capacity Under Development",
+                "interpretive_claim": "shows growth that is explicit about its own incompleteness",
+                "epistemic_boundary": "the plate is a metaphor, not a measure of any person's development",
+            },
         ],
     }
 
 
-def build_figures(project_root: Path | None = None) -> list[Path]:
-    """Write every deterministic SVG figure and the registry; return SVG paths.
+def _resolve_converter() -> str:
+    """Resolve ``rsvg-convert`` from ``PATH`` or fail with an actionable message."""
 
-    Figures are written as SVG only: no external rasterizer dependency, so
-    the build is pure standard library and fully deterministic. The digest
-    pins the registry version that produced them.
+    converter = shutil.which("rsvg-convert")
+    if converter is None:
+        raise RuntimeError(
+            "rsvg-convert is required to rasterize the deterministic cover SVG"
+        )
+    return converter
+
+
+def build_figures(project_root: Path | None = None) -> list[Path]:
+    """Write every deterministic SVG figure, the cover plate, and the registry.
+
+    Figures are written as SVG: no external rasterizer dependency, so the
+    build is pure standard library and fully deterministic. The cover is
+    additionally rasterized to PNG through the shared ``rsvg-convert``
+    binary (resolved from PATH) so the title page has an image to embed;
+    that rasterization is byte-deterministic for a given SVG. The digests
+    pin the registry version that produced the figures.
     """
 
     root = (project_root or ROOT).resolve()
@@ -410,6 +546,7 @@ def build_figures(project_root: Path | None = None) -> list[Path]:
         "growth_cards": growth_cards_svg,
         "marker_matrix": marker_matrix_svg,
         "status_flow": status_flow_svg,
+        COVER_NAME: green_line_cover_svg,
     }
     reg = figure_registry()
     generated: list[Path] = []
@@ -420,7 +557,16 @@ def build_figures(project_root: Path | None = None) -> list[Path]:
         svg_path.write_text(builders[name](), encoding="utf-8")
         generated.append(svg_path)
         digest = hashlib.sha256(svg_path.read_bytes()).hexdigest()
-        entries.append({**entry, "sha256": digest})
+        entry = {**entry, "sha256": digest}
+        if name == COVER_NAME:
+            png_path = out / (name + ".png")
+            subprocess.run(
+                [_resolve_converter(), str(svg_path), "--output", str(png_path)],
+                check=True,
+            )
+            entry["png_sha256"] = hashlib.sha256(png_path.read_bytes()).hexdigest()
+            generated.append(png_path)
+        entries.append(entry)
     registry_out = {**reg, "figures": entries}
     (out / "figure_registry.json").write_text(
         json.dumps(registry_out, indent=2, sort_keys=True), encoding="utf-8"

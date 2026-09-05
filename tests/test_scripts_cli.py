@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -15,10 +16,14 @@ def test_build_figures_cli_runs() -> None:
         capture_output=True,
         text=True,
         cwd=ROOT,
-        env={"PYTHONPATH": str(ROOT / "src"), "PATH": "/usr/bin:/bin:/usr/local/bin"},
+        env={
+            "PYTHONPATH": str(ROOT / "src"),
+            # rsvg-convert (cover rasterization) must be reachable on PATH.
+            "PATH": os.environ["PATH"],
+        },
     )
     assert result.returncode == 0, result.stderr
-    assert "3 figures" in result.stdout
+    assert "5 figures" in result.stdout
 
 
 def test_build_figures_cli_rejects_arguments() -> None:
