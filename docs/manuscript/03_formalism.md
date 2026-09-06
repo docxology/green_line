@@ -44,16 +44,16 @@ An observation whose label matches the counter-signal phrase list is staged
 aside with an intake note and contributes to no surface.
 :::
 
-::: {.prop #prop:fail-closed title="Fail-closed registry"}
+::: {.proposition #prop:fail-closed title="Fail-closed registry"}
 If the registry fails its shape check, the read is NEEDS_REWORK with no
 findings and an intake note naming the defect.
 :::
 
-::: {.prop #prop:empty-scope title="Empty scan set"}
+::: {.proposition #prop:empty-scope title="Empty scan set"}
 If no record's tags intersect the attempt's tags, the read is OUTSIDE_SCOPE.
 :::
 
-::: {.prop #prop:determinism title="Determinism"}
+::: {.proposition #prop:determinism title="Determinism"}
 Two reads of the same attempt against the same registry at the same review
 date produce identical canonical serializations and identical digests.
 :::

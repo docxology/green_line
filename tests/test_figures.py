@@ -77,7 +77,7 @@ def test_cover_registered_and_rasterized(tmp_path: Path) -> None:
             encoding="utf-8"
         )
     )
-    cover = [e for e in registry["figures"] if e["name"] == "green_line_cover"]
+    cover = [e for e in registry["figures"] if e["label"] == "fig:green-line-cover"]
     assert len(cover) == 1
     assert len(cover[0]["png_sha256"]) == 64
     assert cover[0]["png_sha256"] == hashlib.sha256(png.read_bytes()).hexdigest()

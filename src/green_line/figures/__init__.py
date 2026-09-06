@@ -472,48 +472,69 @@ def green_line_cover_svg() -> str:
 
 
 def figure_registry() -> dict:
-    """The derived figure registry, deterministic and digest-pinned."""
+    """The derived figure registry, deterministic and digest-pinned.
 
+    Entries carry the migrated ``fig:*`` accessibility shape: a ``label``
+    the manuscript can anchor with ``{#fig:...}``, the ``filename`` the
+    build actually writes, and the caption/alt/claim/boundary fields.
+    """
+
+    cover_entry = {
+        "label": "fig:green-line-cover",
+        "filename": f"{COVER_NAME}.png",
+        "caption": "Cover plate showing growth drawn with its unrealized continuation left visible",
+        "alt": "A thick green stroke rises through six solid markers and continues as a dashed line through three hollow markers, on a cream field inside a thin rule frame, titled Green Line and tagged Capacity Under Development",
+        "interpretive_claim": "shows growth that is explicit about its own incompleteness",
+        "epistemic_boundary": "the plate is a metaphor, not a measure of any person's development",
+        "source": "green_line registry, evaluator rules, and manuscript protocol",
+        "generated_by": "green_line.figures.build_figures",
+        "format": "PNG rasterized from deterministic SVG",
+    }
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.5",
         "package_version": __version__,
         "registry_digest": registry_digest(GREEN_RECORDS),
         "record_count": len(GREEN_RECORDS),
         "tag_vocabulary": sorted(TAG_VOCABULARY),
         "figures": [
             {
-                "name": "growth_cards",
-                "label": "Growth-record cards",
+                "label": "fig:growth-cards",
+                "filename": "growth_cards.svg",
                 "caption": "Green Line growth records in registry declaration order",
                 "alt": "Cards for each growth record with family colour and required markers",
                 "interpretive_claim": "shows what the registry declares about growth surfaces",
                 "epistemic_boundary": "not a competence or mastery measure",
+                "source": "green_line registry, evaluator rules, and manuscript protocol",
+                "generated_by": "green_line.figures.build_figures",
+                "format": "deterministic SVG",
             },
             {
-                "name": "marker_matrix",
-                "label": "Growth-marker contract",
+                "label": "fig:marker-matrix",
+                "filename": "marker_matrix.svg",
                 "caption": "The registry's marker contract without implying verification",
                 "alt": "Matrix of records with tags and required growth markers",
                 "interpretive_claim": "shows which markers each record asks a reader to look for",
                 "epistemic_boundary": "markers are declarations, not verified practice",
+                "source": "green_line registry, evaluator rules, and manuscript protocol",
+                "generated_by": "green_line.figures.build_figures",
+                "format": "deterministic SVG",
             },
             {
-                "name": "status_flow",
-                "label": "Status projection",
+                "label": "fig:status-flow",
+                "filename": "status_flow.svg",
                 "caption": "How reads project onto the Green Line status vocabulary",
                 "alt": "Flow from intake conditions to status vocabulary",
                 "interpretive_claim": "shows the projection rules the evaluator applies",
                 "epistemic_boundary": "statuses are coverage projections, not judgments of persons",
+                "source": "green_line registry, evaluator rules, and manuscript protocol",
+                "generated_by": "green_line.figures.build_figures",
+                "format": "deterministic SVG",
             },
-            {
-                "name": COVER_NAME,
-                "label": "Cover plate",
-                "caption": "Cover plate showing growth drawn with its unrealized continuation left visible",
-                "alt": "A thick green stroke rises through six solid markers and continues as a dashed line through three hollow markers, on a cream field inside a thin rule frame, titled Green Line and tagged Capacity Under Development",
-                "interpretive_claim": "shows growth that is explicit about its own incompleteness",
-                "epistemic_boundary": "the plate is a metaphor, not a measure of any person's development",
-            },
+            cover_entry,
         ],
+        # The title-page pointer repeats the cover's registered contract so the
+        # renderer's `paper.cover.image` key has something to be bound to.
+        "cover": cover_entry,
     }
 
 
@@ -552,7 +573,7 @@ def build_figures(project_root: Path | None = None) -> list[Path]:
     generated: list[Path] = []
     entries: list = []
     for entry in reg["figures"]:
-        name = entry["name"]
+        name = Path(entry["filename"]).stem
         svg_path = out / (name + ".svg")
         svg_path.write_text(builders[name](), encoding="utf-8")
         generated.append(svg_path)
@@ -569,6 +590,6 @@ def build_figures(project_root: Path | None = None) -> list[Path]:
         entries.append(entry)
     registry_out = {**reg, "figures": entries}
     (out / "figure_registry.json").write_text(
-        json.dumps(registry_out, indent=2, sort_keys=True), encoding="utf-8"
+        json.dumps(registry_out, indent=2) + "\n", encoding="utf-8"
     )
     return generated

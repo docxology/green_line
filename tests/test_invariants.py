@@ -17,9 +17,8 @@ def test_figure_registry_digest_pinned() -> None:
 def test_figure_registry_has_at_least_three_figures() -> None:
     reg = figure_registry()
     assert len(reg["figures"]) >= 3
-    names = [entry["name"] for entry in reg["figures"]]
-    assert names == sorted(names) or names == [e["name"] for e in reg["figures"]]
-    assert len(set(names)) == len(names)
+    labels = [entry["label"] for entry in reg["figures"]]
+    assert len(set(labels)) == len(labels)
 
 
 def test_every_figure_has_boundary() -> None:
