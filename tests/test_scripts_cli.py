@@ -46,3 +46,14 @@ def test_gen_binding_cli_runs() -> None:
         env={"PYTHONPATH": str(ROOT / "src")},
     )
     assert result.returncode == 0, result.stderr
+
+
+def test_gen_formalism_ledger_cli_rejects_arguments() -> None:
+    result = subprocess.run(
+        [sys.executable, "scripts/gen_formalism_ledger.py", "extra"],
+        capture_output=True,
+        text=True,
+        cwd=ROOT,
+        env={"PYTHONPATH": str(ROOT / "src")},
+    )
+    assert result.returncode == 2

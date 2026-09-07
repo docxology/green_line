@@ -79,3 +79,18 @@ def test_the_ledger_guard_rejects_an_unlisted_label() -> None:
 def test_the_ledger_guard_rejects_a_planted_foreign_label() -> None:
     planted = _citations() | {"prop:tier-monotone"}
     assert planted - _declared_labels() == {"prop:tier-monotone"}
+
+
+def test_build_ledger_reproduces_the_committed_artifact() -> None:
+    import sys
+
+    sys.path.insert(0, str(ROOT / "src"))
+    from green_line.formalism_ledger import build_ledger
+
+    before = LEDGER.read_bytes()
+    try:
+        summary = build_ledger()
+        assert LEDGER.read_bytes() == before, "build_ledger() drifted from the committed ledger"
+    finally:
+        LEDGER.write_bytes(before)
+    assert summary.endswith(f"with {len(_ledger()['claims'])} rows")
