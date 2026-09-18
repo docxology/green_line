@@ -73,5 +73,5 @@
       "scheme": "url"
     }
   ],
-  "notes": "One of ten related works (the Line Set family: eight instruments, the cross-line reader, and the witness register). No DOIs have been minted for this work or its siblings, so related works are linked by repository URL and no doi field is present; this work's DOI will be recorded in CITATION.cff identifiers and the record link when minted."
+  "notes": "One of ten related works (the Line Set family: eight instruments, the cross-line reader, and the witness register). This work's version DOI is 10.5281/zenodo.22833492; when it was minted the line-set works began cross-citing one another's Zenodo version DOIs."
 }
