@@ -2,7 +2,7 @@
 
 This repository is standalone by contract. Every gate below runs with zero
 siblings present (no black_line, golden_line, white_line, red_line, line_set,
-or witness_register checkout):
+silver_line, violet_line, blue_line or witness_register checkout):
 
 ```bash
 uv sync
@@ -19,5 +19,8 @@ outcome, never an exception.
 ## Rendering
 
 Manuscript rendering happens through the external template checkout, with the
-project registered as `working/green_line` in that checkout's private sidecar.
-This repo does not render PDFs itself and contains no render intermediates.
+project registered as `projects/working/green_line` in an isolated export of
+the engine's pinned `origin/main`. No family sibling is needed. The engine
+is external build tooling; it is not a Green runtime dependency. Never use
+an active sibling engine's dirty checkout as the release engine. See
+`docs/publication.md`; render products stay in ignored `output/`.

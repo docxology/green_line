@@ -17,22 +17,32 @@ LABEL = re.compile(r"#([a-z]+:[a-z0-9-]+)")
 def build_ledger() -> str:
     """Derive the citation rows, write the ledger, and return the summary line."""
 
-    labels: set[str] = set()
+    labels: dict[str, tuple[str, int]] = {}
     for path in sorted(MANUSCRIPT.glob("*.md")):
         for match in BLOCK.finditer(path.read_text(encoding="utf-8")):
             found = LABEL.search(match.group("attrs"))
             if found:
-                labels.add(found.group(1))
+                label = found.group(1)
+                if label in labels:
+                    raise ValueError(f"duplicate formalism label: {label}")
+                labels[label] = (path.relative_to(ROOT).as_posix(),
+                                 path.read_text(encoding="utf-8")[:match.start()].count("\n") + 1)
+
+    if not labels:
+        raise ValueError("empty formalism declaration scan")
 
     rows = []
     for label in sorted(labels):
+        source_path, source_line = labels[label]
         rows.append(
             {
                 "claim_id": label.replace(":", "_").replace("-", "_"),
                 "kind": "citation",
                 "value": label,
-                "source": "docs/manuscript/03_formalism.md: block declared with this label",
-                "source_path": "docs/manuscript/03_formalism.md",
+                "source": f"{source_path}#{label}: block declared with this label",
+                "source_path": source_path,
+                "source_anchor": label,
+                "source_line": source_line,
                 "source_tier": "manuscript_formalism_block",
                 "freshness": "active",
             }

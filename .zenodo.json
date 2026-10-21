@@ -12,7 +12,7 @@
   ],
   "license": "Apache-2.0",
   "access_right": "open",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "keywords": [
     "active inference",
     "governance",
@@ -73,5 +73,5 @@
       "scheme": "url"
     }
   ],
-  "notes": "One of ten related works (the Line Set family: eight instruments, the cross-line reader, and the witness register). This work's version DOI is 10.5281/zenodo.22833492; when it was minted the line-set works began cross-citing one another's Zenodo version DOIs."
+  "notes": "One of ten related works (the Line Set family: eight instruments, the cross-line reader, and the witness register). The last verified version DOI, for the preceding edition, is 10.5281/zenodo.22833492. The 0.2.0 Zenodo version DOI remains Daniel's reserve-first follow-up; this metadata does not assert that the preceding DOI identifies the new version."
 }

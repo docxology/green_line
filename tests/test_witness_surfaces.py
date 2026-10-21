@@ -36,11 +36,12 @@ def _load(name: str) -> dict:
 
 
 def test_worked_envelope_field_structure() -> None:
+    from green_line import __version__
     payload = _load("green_line_worked.json")
     assert frozenset(payload) == FROZEN_ENVELOPE_FIELDS
     assert payload["line_id"] == "green_line"
     assert payload["schema_version"] == "line.report-envelope/1.0"
-    assert payload["registry_version"] == "0.1.0"
+    assert payload["registry_version"] == __version__
     assert len(payload["report_ref"]) == 64
     assert payload["native_status"] in {
         "STAGED",

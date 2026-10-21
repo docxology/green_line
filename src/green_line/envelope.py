@@ -15,11 +15,14 @@ different lines must not be compared, ranked, averaged, or merged on
 from __future__ import annotations
 
 import json
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
+from datetime import date
+import re
 
 from .model import GreenReading
-from .serialization import reading_digest
+from .serialization import reading_digest, canonical_reading
+from .evidence import canonical_json, content_digest
 from .version import __version__
 
 #: The cross-instrument envelope shape this module exports.
@@ -70,6 +73,8 @@ def reading_envelope(
     reading: GreenReading,
     subject_id: str = "",
     source_snapshot_refs: Iterable[str] = (),
+    *,
+    strict: bool = False,
 ) -> ReadingEnvelope:
     """Wrap a reading in the common envelope, pointing at - never
     re-reading - its complete canonical form.
@@ -80,12 +85,14 @@ def reading_envelope(
     ever point at the derivation that produced its status.
     """
 
+    if isinstance(source_snapshot_refs, (str, bytes, Mapping)):
+        raise TypeError("source_snapshot_refs must be a collection, not text, bytes or a mapping")
     refs = tuple(source_snapshot_refs)
     if not all(isinstance(ref, str) and ref.strip() for ref in refs):
         raise ValueError("source_snapshot_refs must be non-blank strings")
     if not isinstance(subject_id, str):
         raise TypeError("subject_id must be a string")
-    return ReadingEnvelope(
+    envelope = ReadingEnvelope(
         ENVELOPE_SCHEMA,
         GREEN_LINE_ID,
         subject_id,
@@ -94,9 +101,13 @@ def reading_envelope(
         reading.registry_digest,
         reading.status.value,
         reading_digest(reading),
-        refs,
+        tuple(sorted(refs)),
         SCOPE_AND_NONCLAIMS,
     )
+    errors = validate_envelope(envelope, strict=strict)
+    if errors:
+        raise ValueError("; ".join(errors))
+    return envelope
 
 
 def canonical_envelope(envelope: ReadingEnvelope) -> str:
@@ -124,12 +135,55 @@ def envelope_matches_reading(
 ) -> bool:
     """Return whether an envelope still points at exactly this reading."""
 
+    return report_matches(envelope, reading)
+
+
+def report_matches(envelope: ReadingEnvelope, reading: GreenReading) -> bool:
     return (
         envelope.report_ref == reading_digest(reading)
         and envelope.review_date == reading.read_as_of
         and envelope.registry_digest == reading.registry_digest
         and envelope.native_status == reading.status.value
     )
+
+
+def validate_envelope(envelope: ReadingEnvelope, *, strict: bool = False) -> tuple[str, ...]:
+    errors = []
+    if envelope.schema_version != ENVELOPE_SCHEMA:
+        errors.append("unsupported envelope schema")
+    if envelope.line_id != GREEN_LINE_ID:
+        errors.append("foreign line_id")
+    if not isinstance(envelope.subject_id, str) or (
+        envelope.subject_id and not envelope.subject_id.strip()
+    ) or (strict and not envelope.subject_id):
+        errors.append("subject_id must be text and nonblank for strict export")
+    try:
+        if date.fromisoformat(envelope.review_date).isoformat() != envelope.review_date:
+            raise ValueError("noncanonical date")
+    except (ValueError, TypeError):
+        errors.append("review_date must be an ISO date")
+    if not isinstance(envelope.registry_version, str) or not re.fullmatch(r"\d+\.\d+\.\d+", envelope.registry_version):
+        errors.append("registry_version must be a release version")
+    for field in ("registry_digest", "report_ref"):
+        value = getattr(envelope, field)
+        if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
+            errors.append(f"{field} must be a SHA-256 hex digest")
+    from .enums import GrowthStatus
+    if envelope.native_status not in tuple(s.value for s in GrowthStatus):
+        errors.append("unsupported native_status")
+    refs = envelope.source_snapshot_refs
+    if (not isinstance(refs, tuple) or len(refs) > 32 or (strict and not refs)
+            or any(not isinstance(ref, str) or not ref.strip() or len(ref) > 2048 for ref in refs)):
+        errors.append("source_snapshot_refs must be a bounded tuple of nonblank references")
+    if envelope.scope_and_nonclaims != SCOPE_AND_NONCLAIMS:
+        errors.append("scope_and_nonclaims must preserve the Green boundary")
+    return tuple(errors)
+
+
+def provenance_digest(envelope: ReadingEnvelope, reading: GreenReading) -> str:
+    return content_digest(canonical_json({"schema_version": "green.provenance-bundle/1.0",
+                                          "envelope": json.loads(canonical_envelope(envelope)),
+                                          "report": json.loads(canonical_reading(reading))}))
 
 
 __all__ = [
@@ -140,4 +194,7 @@ __all__ = [
     "canonical_envelope",
     "envelope_matches_reading",
     "reading_envelope",
+    "report_matches",
+    "validate_envelope",
+    "provenance_digest",
 ]

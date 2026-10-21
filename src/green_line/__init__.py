@@ -30,8 +30,22 @@ from .serialization import (
     registry_digest,
 )
 from .version import __version__
+from .records import EvaluationContext, IntakeDisposition, MarkerEvidence, NextReview
+from .serialization import replay_reading
+from .comparison import DeclarationComparison, compare_readings
+from .envelope import report_matches, validate_envelope, provenance_digest
 
 __all__ = [
+    "NextReview",
+    "DeclarationComparison",
+    "compare_readings",
+    "report_matches",
+    "validate_envelope",
+    "provenance_digest",
+    "EvaluationContext",
+    "IntakeDisposition",
+    "MarkerEvidence",
+    "replay_reading",
     "COUNTER_SIGNAL_PHRASES",
     "CultivationAttempt",
     "ENVELOPE_SCHEMA",

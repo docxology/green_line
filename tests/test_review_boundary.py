@@ -39,7 +39,7 @@ def test_g01_malformed_observations_are_excluded(token):
     dated, stale, dated_notes = dated_labels((Observation(token),), date(2026, 8, 29), None)
     assert ordinary == dated == frozenset()
     assert not stale
-    assert notes and dated_notes
+    assert notes == dated_notes
 
 
 def test_g01_legitimate_marker_and_tag_policy():

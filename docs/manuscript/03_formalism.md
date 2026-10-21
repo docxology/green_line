@@ -54,6 +54,9 @@ If no record's tags intersect the attempt's tags, the read is OUTSIDE_SCOPE.
 :::
 
 ::: {.proposition #prop:determinism title="Determinism"}
-Two reads of the same attempt against the same registry at the same review
-date produce identical canonical serializations and identical digests.
+Two reads of the same normalized attempt against the same registry,
+declared vocabulary and instrument identity, at the same review date, with
+the same freshness window, episode and undated-declaration policies, evaluator and lexical policy
+identities produce identical canonical serializations and identical digests.
+Native reports archive these inputs and typed dispositions for replay.
 :::

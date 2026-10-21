@@ -45,6 +45,12 @@ uv run python scripts/build_figures.py
 Standalone by contract: no sibling line, the reader, or the witness register
 is needed for any of these commands. See STANDALONE.md.
 
+Native reports retain replay context and typed marker evidence; see
+[native reports](docs/native_reports.md), [envelope checks](docs/envelopes.md),
+and [learner-owned review records](docs/practice_records.md). The
+[review implementation record](docs/review_20261020.md) traces the changes.
+Publication follows the [reserve-first procedure](docs/publication.md).
+
 ## The Line Set
 
 This work is one of ten in the Line Set family — eight instruments, their

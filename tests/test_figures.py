@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import pytest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from green_line.figures import (
@@ -46,8 +49,9 @@ def test_figure_registry_file_written(tmp_path: Path) -> None:
 
 
 def test_growth_cards_mentions_registry_count() -> None:
+    from green_line import GREEN_RECORDS
     svg = growth_cards_svg()
-    assert "11" in svg or True  # count appears in desc text
+    assert f"{len(GREEN_RECORDS)} Green Line growth records" in svg
 
 
 def test_marker_matrix_accepts_custom_registry() -> None:
@@ -81,3 +85,21 @@ def test_cover_registered_and_rasterized(tmp_path: Path) -> None:
     assert len(cover) == 1
     assert len(cover[0]["png_sha256"]) == 64
     assert cover[0]["png_sha256"] == hashlib.sha256(png.read_bytes()).hexdigest()
+
+
+def test_missing_converter_fails_instead_of_claiming_a_cover(tmp_path):
+    previous = os.environ["PATH"]
+    try:
+        os.environ["PATH"] = str(tmp_path)
+        with pytest.raises(RuntimeError, match="rsvg-convert is required"):
+            build_figures(tmp_path)
+    finally:
+        os.environ["PATH"] = previous
+    assert not (tmp_path / "output" / "figures" / "green_line_cover.png").exists()
+
+
+def test_growth_card_multiline_title_does_not_overlap_body():
+    nodes = list(ET.fromstring(growth_cards_svg()).iter("{http://www.w3.org/2000/svg}text"))
+    title_end = next(n for n in nodes if n.text == "language")
+    body_start = next(n for n in nodes if n.text == "Flag observations phrased as")
+    assert float(body_start.attrib["y"]) - float(title_end.attrib["y"]) >= 30

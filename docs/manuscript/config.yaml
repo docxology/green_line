@@ -1,7 +1,7 @@
 paper:
   title: "Green Line: a capacity-under-development instrument"
-  version: "0.1.0"
-  date: "2026-08-29"
+  version: "0.2.0"
+  date: "2026-10-21"
   cover:
     image: "../../output/figures/green_line_cover.png"
 
@@ -27,7 +27,7 @@ render:
     epub: false
 
 metadata:
-  license: "CC-BY-4.0 (prose); Apache-2.0 (code)"
+  license: "Apache-2.0"
   status: "living document — versioned and revisable"
   geometry: "left=0.33in,right=0.33in,top=0.55in,bottom=0.55in"
   language: "en"

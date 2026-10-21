@@ -134,7 +134,7 @@ def test_dated_label_without_usable_label_is_ignored() -> None:
         (Observation("   ", None),), date(2026, 8, 29), 60
     )
     assert not fresh and not stale
-    assert any("without a usable label" in note for note in notes)
+    assert notes == ("ignored a malformed observation label",)
 
 
 def test_registry_shape_error_duplicate_id() -> None:

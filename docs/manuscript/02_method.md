@@ -33,5 +33,25 @@ record applied.
 
 Every read is a pure function of the attempt, the registry, and the review
 configuration. Reads are serialized canonically (sorted keys, declaration
-order preserved with explicit sorts before emit) and pinned by a SHA-256
+records sorted by canonical ID, required-marker order preserved) and pinned by a SHA-256
 digest of both the reading and the registry that produced it.
+The native report stores a versioned context including the freshness window
+and policy identity. Description prose remains restricted to its owner; a
+digest and validity flag are archived, without proving authorship or truth.
+
+## Typed scope and learner-owned review
+
+Native reports distinguish no tags, unmatched tags, malformed tags, empty
+registries and applied scope. Per-record relevance distinguishes fresh
+required declarations, stale required declarations, unrelated-only labels
+and no counted declarations. Under the retained global rule, adding only an
+unrelated label can change NEEDS_MARKER to NEEDS_REWORK without changing a
+required-marker surface. This is a declaration rule, not a judgment of capacity.
+
+An optional next-review record holds a practice step, question, date and
+what declaration would change the reading; it cannot upgrade marker coverage.
+Optional source and practice-episode references remain assertions. The replay
+context explicitly chooses whether episodes combine. Longitudinal comparison
+requires pinned reports for the same declared subject and policy; it reports
+added, removed, refreshed and still-missing declarations without ranking or
+inferring improvement or decline. Missing reports support no comparison.

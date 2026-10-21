@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import pytest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -59,10 +60,28 @@ def test_every_referenced_label_is_both_declared_and_ledgered() -> None:
     assert referenced <= _citations(), sorted(referenced - _citations())
 
 
+def assert_row_resolves(row):
+    assert (ROOT / row["source_path"]).is_file(), row["claim_id"]
+    text = (ROOT / row["source_path"]).read_text(encoding="utf-8")
+    declarations = [_LABEL.search(m.group("attrs")) for m in _BLOCK.finditer(text)]
+    labels = [m.group(1) for m in declarations if m]
+    assert labels.count(row["source_anchor"]) == 1
+    assert row["source_anchor"] == row["value"]
+    assert row["freshness"] == "active", row["claim_id"]
+
+
 def test_every_ledger_source_path_exists() -> None:
-    for row in _ledger()["claims"]:
-        assert (ROOT / row["source_path"]).is_file(), row["claim_id"]
-        assert row["freshness"] == "active", row["claim_id"]
+    rows = _ledger()["claims"]
+    assert rows
+    for row in rows:
+        assert_row_resolves(row)
+
+
+def test_wrong_anchor_and_wrong_existing_file_fail():
+    row = _ledger()["claims"][0]
+    for change in ({"source_anchor": "def:absent"}, {"source_path": "docs/manuscript/02_method.md"}):
+        with pytest.raises(AssertionError):
+            assert_row_resolves({**row, **change})
 
 
 def test_ledger_claim_ids_are_unique() -> None:
@@ -81,16 +100,19 @@ def test_the_ledger_guard_rejects_a_planted_foreign_label() -> None:
     assert planted - _declared_labels() == {"prop:tier-monotone"}
 
 
-def test_build_ledger_reproduces_the_committed_artifact() -> None:
+def test_build_ledger_reproduces_the_committed_artifact(tmp_path) -> None:
     import sys
 
     sys.path.insert(0, str(ROOT / "src"))
     from green_line.formalism_ledger import build_ledger
 
+    import green_line.formalism_ledger as module
     before = LEDGER.read_bytes()
+    original = module.OUT
     try:
+        module.OUT = tmp_path / "ledger.json"
         summary = build_ledger()
-        assert LEDGER.read_bytes() == before, "build_ledger() drifted from the committed ledger"
+        assert module.OUT.read_bytes() == before, "build_ledger() drifted from the committed ledger"
     finally:
-        LEDGER.write_bytes(before)
+        module.OUT = original
     assert summary.endswith(f"with {len(_ledger()['claims'])} rows")

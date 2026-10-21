@@ -36,15 +36,11 @@ TITLE_FONT = "Georgia,Times New Roman,serif"
 
 COLS = 4
 CARD_W = 300
-CARD_H = 240
 CARD_GAP_X = 325
-CARD_GAP_Y = 265
 GRID_X = 78
 GRID_Y = 205
 ROWS = (len(GREEN_RECORDS) + COLS - 1) // COLS
 WIDTH = 1400
-FOOTER_Y = GRID_Y + ROWS * CARD_GAP_Y + 30
-HEIGHT = FOOTER_Y + 110
 MIN_FONT = 6
 
 STATUS_FILL = {
@@ -137,6 +133,13 @@ def wrap(value: str, width: int = 40) -> list[str]:
 def growth_cards_svg() -> str:
     """The registry drawn as cards in declaration order, keyed by family."""
 
+    layouts = [(60 + len(wrap(r.title, 28)) * 24 + 12,
+                60 + len(wrap(r.title, 28)) * 24 + 12 + len(wrap(r.wire, 30)) * 21 + 18)
+               for r in GREEN_RECORDS]
+    card_h = max(marker_y + 48 for _, marker_y in layouts)
+    card_gap_y = card_h + 25
+    footer_y = GRID_Y + ROWS * card_gap_y + 30
+    height = footer_y + 110
     body = [
         headline(64, 58, "Small markers make a growth surface visible"),
         text(
@@ -154,16 +157,17 @@ def growth_cards_svg() -> str:
             fill=MUTED,
             weight="700",
         ),
-        rect(50, 150, WIDTH - 100, ROWS * CARD_GAP_Y + 40, fill=PANEL),
+        rect(50, 150, WIDTH - 100, ROWS * card_gap_y + 40, fill=PANEL),
     ]
     from green_line.model import GrowthKind
 
     for index, record in enumerate(GREEN_RECORDS):
         row, col = divmod(index, COLS)
         x = GRID_X + col * CARD_GAP_X
-        y = GRID_Y + row * CARD_GAP_Y
+        y = GRID_Y + row * card_gap_y
+        wire_y, marker_y = layouts[index]
         accent = FAMILY_FILL.get(record.kind.value, GREEN)
-        body.append(rect(x, y, CARD_W, CARD_H, fill=CREAM, stroke=accent))
+        body.append(rect(x, y, CARD_W, card_h, fill=CREAM, stroke=accent))
         body.append(
             '<rect x="' + str(x) + '" y="' + str(y) + '" width="' + str(CARD_W)
             + '" height="8" rx="4" fill="' + accent + '"/>'
@@ -184,28 +188,28 @@ def growth_cards_svg() -> str:
             )
         for line_index, wire_line in enumerate(wrap(record.wire, 30)):
             body.append(
-                text(x + 18, y + 118 + line_index * 21, wire_line, size=15, fill=MUTED)
+                text(x + 18, y + wire_y + line_index * 21, wire_line, size=15, fill=MUTED)
             )
-        body.append(text(x + 18, y + 196, "markers", size=15, fill=accent, weight="700"))
+        body.append(text(x + 18, y + marker_y, "markers", size=15, fill=accent, weight="700"))
         body.append(
-            text(x + 18, y + 220, " - ".join(record.required_markers), size=14, fill=INK)
+            text(x + 18, y + marker_y + 24, " - ".join(record.required_markers), size=14, fill=INK)
         )
     legend_x = GRID_X
-    body.append(text(legend_x, FOOTER_Y, "Growth families", size=16, fill=INK, weight="700"))
+    body.append(text(legend_x, footer_y, "Growth families", size=16, fill=INK, weight="700"))
     legend_x += 150
     for kind in GrowthKind:
         accent = FAMILY_FILL.get(kind.value, GREEN)
         body.append(
-            '<rect x="' + str(legend_x) + '" y="' + str(FOOTER_Y - 15)
+            '<rect x="' + str(legend_x) + '" y="' + str(footer_y - 15)
             + '" width="18" height="18" rx="4" fill="' + accent + '"/>'
         )
-        body.append(text(legend_x + 26, FOOTER_Y, kind.value.lower(), size=15, fill=INK, weight="700"))
+        body.append(text(legend_x + 26, footer_y, kind.value.lower(), size=15, fill=INK, weight="700"))
         legend_x += 46 + len(kind.value) * 9
-    body.append(text(GRID_X, FOOTER_Y + 48, "Boundary", size=16, fill=INK, weight="700"))
+    body.append(text(GRID_X, footer_y + 48, "Boundary", size=16, fill=INK, weight="700"))
     body.append(
         text(
             GRID_X + 106,
-            FOOTER_Y + 48,
+            footer_y + 48,
             "Green Line describes what is still growing; it never certifies competence or ranks learners.",
             size=16,
             fill=MUTED,
@@ -218,7 +222,7 @@ def growth_cards_svg() -> str:
     )
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" width="' + str(WIDTH) + '" height="'
-        + str(HEIGHT) + '" viewBox="0 0 ' + str(WIDTH) + " " + str(HEIGHT)
+        + str(height) + '" viewBox="0 0 ' + str(WIDTH) + " " + str(height)
         + '" role="img" aria-labelledby="title desc">'
         + '<title id="title">Small markers make a growth surface visible</title>'
         + '<desc id="desc">' + desc + "</desc>"
@@ -279,7 +283,7 @@ def marker_matrix_svg(records: tuple = GREEN_RECORDS) -> str:
         body.append('<rect x="70" y="' + str(y) + '" width="8" height="36" rx="4" fill="' + accent + '"/>')
         body.append(text(94, y + 18, str(index + 1).zfill(2) + "  " + record.title, size=16, weight="700"))
         body.append(text(94, y + 40, record.kind.value.lower(), size=16, fill=accent, weight="700"))
-        x = 610
+        x: float = 610
         for tag in sorted(record.tags):
             x += chip(x, y + 6, tag, fill=GREY, stroke=GRID) + 6
         x = 930
@@ -314,7 +318,7 @@ def status_flow_svg() -> str:
         text(
             64,
             88,
-            "STAGED means declared markers cover the record; NEEDS_MARKER means refresh; NEEDS_REWORK means practice is missing.",
+            "STAGED means declared marker coverage; NEEDS_MARKER means no declarations or refresh; NEEDS_REWORK means marker gaps.",
             size=15,
             fill=MUTED,
         ),

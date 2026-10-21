@@ -8,7 +8,7 @@ from green_line.version import __version__
 
 def test_version_authority() -> None:
     assert green_line.__version__ == __version__
-    assert __version__ == "0.1.0"
+    assert __version__ == "0.2.0"
 
 
 def test_all_exports_resolve() -> None:

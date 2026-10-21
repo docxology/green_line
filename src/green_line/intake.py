@@ -180,7 +180,7 @@ def dated_labels(
     for item in records:
         raw_label = getattr(item, "label", None)
         if not isinstance(raw_label, str) or not raw_label.strip():
-            notes.append("ignored a dated observation record without a usable label")
+            notes.append("ignored a malformed observation label")
             continue
         label = raw_label.strip().lower()
         note = observation_exclusion(label)

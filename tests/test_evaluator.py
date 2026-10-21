@@ -162,15 +162,14 @@ def test_malformed_tag_collection_set_aside() -> None:
 
 
 def test_dated_evidence_not_a_collection() -> None:
+    attempt = CultivationAttempt(description="x", tags=frozenset({"research"}))
+    object.__setattr__(attempt, "dated_observations", "not a collection")
     reading = read_cultivation(
-        CultivationAttempt(description="x", tags=frozenset({"research"})),
+        attempt,
         as_of="2026-08-29",
     )
-    assert reading.status in (
-        GrowthStatus.NEEDS_MARKER,
-        GrowthStatus.OUTSIDE_SCOPE,
-        GrowthStatus.NEEDS_REWORK,
-    )
+    assert reading.status is GrowthStatus.NEEDS_MARKER
+    assert reading.intake_notes == ("dated observation declaration is not a collection of records",)
 
 
 def test_non_iterable_records_fail_closed() -> None:

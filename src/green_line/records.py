@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 
 from .enums import GrowthKind, GrowthStatus, SignalStatus
 
@@ -46,6 +47,9 @@ class Observation:
 
     label: str
     noted_on: str | None = None
+    source_ref: str | None = None
+    episode_id: str | None = None
+    commentary: str | None = None
 
 
 @dataclass(frozen=True)
@@ -56,6 +60,23 @@ class CultivationAttempt:
     tags: frozenset[str] = frozenset()
     observations: frozenset[str] = frozenset()
     dated_observations: tuple[Observation, ...] = ()
+    next_review: NextReview | None = None
+
+
+@dataclass(frozen=True)
+class NextReview:
+    next_practice_step: str | None = None
+    review_question: str | None = None
+    review_on: str | None = None
+    evidence_would_change: str | None = None
+
+    def __post_init__(self) -> None:
+        for field in ("next_practice_step", "review_question", "review_on", "evidence_would_change"):
+            value = getattr(self, field)
+            if value is not None and (not isinstance(value, str) or not value.strip()):
+                raise ValueError(f"{field} must be nonblank text or None")
+        if self.review_on is not None and date.fromisoformat(self.review_on).isoformat() != self.review_on:
+            raise ValueError("review_on must be a canonical ISO date")
 
 
 @dataclass(frozen=True)
@@ -65,6 +86,7 @@ class RecordFinding:
     record_id: str
     status: SignalStatus
     reasons: tuple[str, ...]
+    declaration_relevance: str = ""
 
 
 @dataclass(frozen=True)
@@ -91,3 +113,43 @@ class GreenReading:
     intake_notes: tuple[str, ...] = ()
     read_as_of: str = ""
     registry_digest: str = ""
+    context: EvaluationContext | None = None
+    normalized_input: str = ""
+    registry_snapshot: str = ""
+    intake_dispositions: tuple[IntakeDisposition, ...] = ()
+    marker_surfaces: tuple[MarkerSurfaces, ...] = ()
+    marker_evidence: tuple[MarkerEvidence, ...] = ()
+    scope_reason: str = ""
+
+
+@dataclass(frozen=True)
+class EvaluationContext:
+    max_observation_age_days: int | None
+    evaluator_version: str
+    policy_version: str
+    counter_signal_policy_digest: str
+    input_digest: str
+    instrument_id: str
+    registry_vocabulary: tuple[str, ...]
+    episode_policy: str = "combine_declared"
+    undated_policy: str = "current"
+
+
+@dataclass(frozen=True)
+class IntakeDisposition:
+    label: str | None
+    channel: str
+    noted_on: str | None
+    disposition: str
+    reason_code: str
+    source_ref: str | None = None
+    episode_id: str | None = None
+    note: str | None = None
+
+
+@dataclass(frozen=True)
+class MarkerEvidence:
+    record_id: str
+    label: str
+    disposition: str
+    declarations: tuple[IntakeDisposition, ...]

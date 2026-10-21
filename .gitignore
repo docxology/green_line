@@ -5,8 +5,10 @@ __pycache__/
 .ruff_cache/
 *.egg-info/
 output/
-uv.lock
 .coverage
 htmlcov/
+.mypy_cache/
+graft/
+build/
 MDEOF
 echo data-docs ok
