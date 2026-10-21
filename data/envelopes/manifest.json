@@ -55,7 +55,7 @@
   ],
   "invocation": "scripts/gen_envelopes.py --source-commit <source_commit>",
   "schema_version": "green.example-bundle/1.0",
-  "source_commit": "650dda1c9c205a38aa224f69136049da59a5b115",
+  "source_commit": "332e3e9cb86f666d458db4a01d074e33cfdb0eb8",
   "source_hashes": {
     "scripts/gen_envelopes.py": "886c487d2d34aef7c942af15c80aae9a59277e2eb1be055f1fb5b242615a5033",
     "src/green_line/__init__.py": "d949a4203a59dbdbb160d575417d09a4eebe13968e35826e486e2894e097c2a8",

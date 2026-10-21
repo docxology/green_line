@@ -1,0 +1,70 @@
+{
+  "artifact_sha256": {
+    "output/figures/figure_registry.json": "237651b8049be2dfca85e857717a2d112ffe3981b92dfab84eb55494d55dde34",
+    "output/figures/green_line_cover.png": "a8d49512500c0c8d2cd4422f9a954c2fa8c2d360d566187cd38398363e0bdee1",
+    "output/figures/green_line_cover.svg": "b6ce60793fc1825dd8ac4df11efecf34127e96979c036126a44ed5f3f6838709",
+    "output/figures/growth_cards.svg": "b9c817179f5fa0b5ae4d6e53c6353084b2a4f308918b07e0fc7c966c1115f85e",
+    "output/figures/marker_matrix.svg": "15b02a9bf53258f60a83a52248290eb85fc60d36bb39b28a63f2010914400804",
+    "output/figures/status_flow.svg": "6a23a07f59fff4cd3d3012761358523a81c89447b8ce342dd5eaf86f66306b3b",
+    "output/pdf/green_line_combined.pdf": "b6d41588e0932753ddc3342ed99287b0d5451598e21ef5048f412d5910fee484",
+    "output/web/index.html": "4fe63cf6d6fcb929f2d209860d785fa8877cb24123c8d5d99daea20bd21634ea",
+    "output/wheels/green_line-0.2.0-py3-none-any.whl": "ad9256846dad1f0315a85386808edc602d9f8d56350938eec48cca7500e3d5c2"
+  },
+  "coverage": {
+    "covered_branches": 258,
+    "covered_lines": 862,
+    "excluded_lines": 0,
+    "missing_branches": 0,
+    "missing_lines": 0,
+    "num_branches": 258,
+    "num_partial_branches": 0,
+    "num_statements": 862,
+    "percent_branches_covered": 100,
+    "percent_branches_covered_display": "100.00",
+    "percent_covered": 100,
+    "percent_covered_display": "100.00",
+    "percent_statements_covered": 100,
+    "percent_statements_covered_display": "100.00"
+  },
+  "cross_runtime_replay": {
+    "installed_wheel_python310_cases": 3,
+    "python310_python314_identical_outputs": 3,
+    "python314_to_python310_cases": 3
+  },
+  "date": "2026-10-21",
+  "engine_commit": "4670c48cc490636455f2eac09ba4396baed9ffd7",
+  "registry": {
+    "records": 11,
+    "required_marker_slots": 22,
+    "tags": 6
+  },
+  "source_commit": "332e3e9cb86f666d458db4a01d074e33cfdb0eb8",
+  "source_files_verified": 17,
+  "tests": {
+    "python310_runtime": {
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "128"
+    },
+    "python311": {
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "214"
+    },
+    "python314": {
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "214"
+    },
+    "standalone": {
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "214"
+    }
+  },
+  "version": "0.2.0"
+}
