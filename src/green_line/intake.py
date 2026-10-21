@@ -13,6 +13,7 @@ from collections.abc import Iterable
 from datetime import date, datetime
 
 from .model import GreenRecord, GrowthKind
+from .registry import TAG_VOCABULARY
 
 
 #: Phrases that counter-signal drift toward a resume, a competence
@@ -60,9 +61,17 @@ def resolve_max_age(max_age_days: int | None) -> int | None:
     return max_age_days
 
 
-def registry_shape_error(records: tuple[GreenRecord, ...]) -> str | None:
+def registry_shape_error(
+    records: tuple[GreenRecord, ...],
+    vocabulary: frozenset[str] = TAG_VOCABULARY,
+) -> str | None:
     """Return a blocking note when a registry cannot be safely scored."""
 
+    if not isinstance(vocabulary, frozenset) or not vocabulary or any(
+        not isinstance(tag, str) or not tag or tag != tag.strip().lower()
+        for tag in vocabulary
+    ):
+        return "registry vocabulary must be a nonempty frozenset of canonical tags"
     seen_ids: set[str] = set()
     for index, record in enumerate(records):
         if not isinstance(record, GreenRecord):
@@ -75,12 +84,18 @@ def registry_shape_error(records: tuple[GreenRecord, ...]) -> str | None:
         if record.id in seen_ids:
             return f"record registry contains duplicate id '{record.id}'"
         seen_ids.add(record.id)
+        if record.id != record.id.strip().lower():
+            return f"record '{record.id}' has a noncanonical id; use lowercase trimmed text"
         if (
             not isinstance(record.tags, frozenset)
             or not record.tags
             or any(not isinstance(tag, str) or not tag.strip() for tag in record.tags)
         ):
             return f"record '{record.id}' has malformed tags"
+        if any(tag != tag.strip().lower() for tag in record.tags):
+            return f"record '{record.id}' has a noncanonical tag; use lowercase trimmed text"
+        if not record.tags <= vocabulary:
+            return f"record '{record.id}' has tags outside declared vocabulary"
         if (
             not isinstance(record.required_markers, tuple)
             or not record.required_markers
@@ -90,6 +105,10 @@ def registry_shape_error(records: tuple[GreenRecord, ...]) -> str | None:
             )
         ):
             return f"record '{record.id}' has malformed required markers"
+        if any(label != label.strip().lower() for label in record.required_markers):
+            return f"record '{record.id}' has a noncanonical marker; use lowercase trimmed text"
+        if len(set(record.required_markers)) != len(record.required_markers):
+            return f"record '{record.id}' has a duplicate marker"
         if not isinstance(record.kind, GrowthKind):
             return f"record '{record.id}' has an invalid kind"
     return None
@@ -112,7 +131,12 @@ def clean_labels(raw: object, field: str) -> tuple[frozenset[str], tuple[str, ..
         if not isinstance(token, str) or not token.strip():
             notes.append(f"ignored a malformed {field} label")
             continue
-        kept.add(token.strip().lower())
+        label = token.strip().lower()
+        note = observation_exclusion(label) if field == "observation" else None
+        if note:
+            notes.append(note)
+        else:
+            kept.add(label)
     return frozenset(kept), tuple(notes)
 
 
@@ -121,6 +145,15 @@ def is_counter_signal(label: str) -> bool:
 
     lowered = label.lower()
     return any(phrase in lowered for phrase in COUNTER_SIGNAL_PHRASES)
+
+
+def observation_exclusion(label: str) -> str | None:
+    if is_counter_signal(label):
+        return (
+            f"observation '{label}' counter-signals certification or resume "
+            "drift and was set aside rather than counted"
+        )
+    return None
 
 
 def dated_labels(
@@ -150,11 +183,9 @@ def dated_labels(
             notes.append("ignored a dated observation record without a usable label")
             continue
         label = raw_label.strip().lower()
-        if is_counter_signal(label):
-            notes.append(
-                f"observation '{label}' counter-signals certification or resume "
-                "drift and was set aside rather than counted"
-            )
+        note = observation_exclusion(label)
+        if note:
+            notes.append(note)
             continue
         noted_on = getattr(item, "noted_on", None)
         if noted_on is None:

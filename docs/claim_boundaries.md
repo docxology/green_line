@@ -9,6 +9,9 @@ first person and underclaim.
   labels at a stated review date. That is all a read establishes.
 - I counter-signal lexical drift toward certification, credential, resume,
   and virtue language, and I stage such observations aside with notes.
+  I apply the same substring rule to ordinary and dated labels. This can
+  exclude labels such as `masterclass_practice`; it is not intent detection.
+  Tags are matching declarations and are normalized separately.
 
 ## What I do not claim
 

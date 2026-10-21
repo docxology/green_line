@@ -5,7 +5,7 @@
 Append one `GreenRecord` to `GREEN_RECORDS` in `src/green_line/registry.py`,
 using tags from `TAG_VOCABULARY`. Then:
 
-1. Rerun the invariant battery (`uv run pytest tests/test_invariants.py`).
+1. Rerun the invariant battery (`uv run pytest tests/test_invariants.py tests/test_registry.py`).
    Tags outside the vocabulary fail closed.
 2. Regenerate figures (`uv run python scripts/build_figures.py`); the
    registry digest in `output/figures/figure_registry.json` moves, which is

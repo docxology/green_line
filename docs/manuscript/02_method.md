@@ -10,6 +10,10 @@ A read proceeds in three stages:
    (certification, credential, resume language) are staged aside with an
    explanatory note and never counted. Nothing crashes on hostile input and
    no value is invented.
+   Ordinary and dated observations share the same lexical exclusion rule;
+   tags are normalized separately. Registry matching fields must already be
+   lowercase and trimmed, required markers unique, and tags in the declared
+   vocabulary. Definitions are rejected rather than silently rewritten.
 2. **Matching** (`green_line.evaluator`). Growth records whose tags intersect
    the attempt's declared tags apply. An empty intersection is the outcome
    `OUTSIDE_SCOPE`, not an exception.
