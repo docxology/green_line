@@ -9,8 +9,9 @@ from typing import TypeGuard
 
 from .intake import COUNTER_SIGNAL_PHRASES, observation_exclusion
 from .records import IntakeDisposition, NextReview
+from .dates import parse_iso_date
 
-POLICY_VERSION = "green.declaration-policy/2.0"
+POLICY_VERSION = "green.declaration-policy/2.1"
 
 
 def canonical_json(value: object) -> str:
@@ -24,6 +25,7 @@ def content_digest(value: str) -> str:
 def policy_digest() -> str:
     return content_digest(canonical_json({"phrases": sorted(COUNTER_SIGNAL_PHRASES),
                                          "matching": "lowercase-substring",
+                                         "date_grammar": "YYYY-MM-DD",
                                          "version": POLICY_VERSION}))
 
 
@@ -99,7 +101,7 @@ def observation_dispositions(snapshot: dict, read_date: date, max_age: int | Non
                 code, disposition, note = "MALFORMED_METADATA", "excluded", f"observation '{label}' has malformed attribution and was not counted"
             elif noted is not None:
                 try:
-                    day = date.fromisoformat(noted)
+                    day = parse_iso_date(noted)
                 except ValueError:
                     code, disposition, note = "INVALID_DATE", "excluded", f"observation '{label}' has an unreadable date and was not counted"
                 else:

@@ -2,13 +2,13 @@
   "examples": [
     {
       "context": {
-        "counter_signal_policy_digest": "e7764da65b304648ebc996a5071c3f16dec52d3d9e3ef9ca8f771856b16e4163",
+        "counter_signal_policy_digest": "247defbcfe372c8a180a3c657c0703cfdc3d66492ba5a71c683a7da1ceb501aa",
         "episode_policy": "combine_declared",
         "evaluator_version": "0.2.0",
         "input_digest": "f4b73806bad0537807b82e3ac15276ba73fbea52fdd555c9d60673ba984aa83b",
         "instrument_id": "green_line",
         "max_observation_age_days": null,
-        "policy_version": "green.declaration-policy/2.0",
+        "policy_version": "green.declaration-policy/2.1",
         "registry_vocabulary": [
           "analysis",
           "data",
@@ -20,21 +20,21 @@
         "undated_policy": "current"
       },
       "envelope": "green_line_worked.json",
-      "envelope_sha256": "ebef1a6189ed99a6700f6e3d43582eab8ecdc2bd749f99981d8a9055791a4229",
-      "provenance_digest": "ff3ddb3732cdf24db74747a042472e9de5a876f7a9c7d5d9a4bd4aba2c7b761e",
+      "envelope_sha256": "b342ea83e5a2f4c01c4eed093b31f8fd97fa05477bf9dfaaf41df67b7318ad22",
+      "provenance_digest": "0d8cc3254c5ca46a7f6c5c6a4fe6da0d092a29a59d09bcc5b1f3002a000b2b50",
       "report": "green_line_worked.report.json",
-      "report_sha256": "f1d54cb3edd3f21b416945691cb8cff4924475e767d01dc07528dd4b3ebbbdaf",
+      "report_sha256": "d8154a0053e2d850eeace0db66ee6c3cb9372011a59efe66bf2c6a12891f44a4",
       "review_date": "2026-08-29"
     },
     {
       "context": {
-        "counter_signal_policy_digest": "e7764da65b304648ebc996a5071c3f16dec52d3d9e3ef9ca8f771856b16e4163",
+        "counter_signal_policy_digest": "247defbcfe372c8a180a3c657c0703cfdc3d66492ba5a71c683a7da1ceb501aa",
         "episode_policy": "combine_declared",
         "evaluator_version": "0.2.0",
         "input_digest": "0c9e3fcab2a54a9f84d1d3b57831618a6787d2fc9aefacd47d1760f3ef3a258f",
         "instrument_id": "green_line",
         "max_observation_age_days": null,
-        "policy_version": "green.declaration-policy/2.0",
+        "policy_version": "green.declaration-policy/2.1",
         "registry_vocabulary": [
           "analysis",
           "data",
@@ -46,30 +46,31 @@
         "undated_policy": "current"
       },
       "envelope": "green_line_same_subject.json",
-      "envelope_sha256": "ad555292173d41624831e91bbef86256ee0de45fc423a0f7215949dfa38f6cc2",
-      "provenance_digest": "29bcf8d6fe7aeb793b253940a086bdd36c3a4b1f7393ac21abfb2eb552811775",
+      "envelope_sha256": "506219e888c8751080b91abd70860c5033ae0cd90563ceb365e7e539a71f2b60",
+      "provenance_digest": "af07075c07c1644f0136b17c7f2c33a0e5e7ae0b8e4ee0c21e252cbe19034fee",
       "report": "green_line_same_subject.report.json",
-      "report_sha256": "054e117090f2acdaead8d89b7283cc0c453a625a16c51922e2ce39496fea9d3c",
+      "report_sha256": "6ceeebf01f492d94e101a8c7e5118a8c0b5841730133d11120af5d0db729b67d",
       "review_date": "2026-07-29"
     }
   ],
   "invocation": "scripts/gen_envelopes.py --source-commit <source_commit>",
   "schema_version": "green.example-bundle/1.0",
-  "source_commit": "afe58737b134fd0b255256661ffb4df8d2b06ee3",
+  "source_commit": "650dda1c9c205a38aa224f69136049da59a5b115",
   "source_hashes": {
     "scripts/gen_envelopes.py": "886c487d2d34aef7c942af15c80aae9a59277e2eb1be055f1fb5b242615a5033",
     "src/green_line/__init__.py": "d949a4203a59dbdbb160d575417d09a4eebe13968e35826e486e2894e097c2a8",
-    "src/green_line/comparison.py": "7038694a8a6595d0bacbaddcd1b937fe516dbfa192f6f954af00043771162414",
+    "src/green_line/comparison.py": "7c03100ec92e900cd5a401723c71b5250519dbb9324db159873fcfa5cb9293eb",
+    "src/green_line/dates.py": "e5af1da29209ead30ff8dd00b051e8bba0df60b7c05960cd9f8b1d6a6414f59e",
     "src/green_line/enums.py": "7006ef1484285fb0f7b2e36e1151f8bcd353f950ce5efd00d28c8f58a390c8ff",
     "src/green_line/envelope.py": "41ca7f4d4072a4459ba7ac79977c1cb1281fbe3fe48f2f53c22ac5bdd24ffb17",
     "src/green_line/evaluator.py": "4ef8a9e358fb45635e1e29a26a9b139ce1e45e293eca4d8b8cda386db982598b",
-    "src/green_line/evidence.py": "095f469f8b0f3ff8237a5f1bd19869c5ace1b3f11f0a2ca7cce385abf4385a4f",
+    "src/green_line/evidence.py": "517e245e4f23793f4858322ad260d0c1bf1492412398dc2e583e9582380fb83e",
     "src/green_line/examples.py": "5cc99315694dc5e07fc154d72bb86d550bcdf00da3ad1b58408aec327d90585d",
     "src/green_line/figures/__init__.py": "bfdd8d4ea62e7e2883408b862f55bd1d437dc1d66f7a639d27a6ec686cfa2919",
     "src/green_line/formalism_ledger.py": "acaf6b486a55ce61d4d6c0f0aad25ac754eabcadf89e471d69c11f5b5263cb86",
-    "src/green_line/intake.py": "37e6bfde187576b556daf5a1203ecbe69204c5aa2bad7aadd9a5ed562447e267",
+    "src/green_line/intake.py": "b5cb8a3a2dbec68afcf56bc3b2fdabab0d22281def02d200ab8ae6a077c19974",
     "src/green_line/model.py": "31a3ce7e79e798421c5ba053e2a1ee56884edacb4c1cb37ec3d85cdfc6999298",
-    "src/green_line/records.py": "823cf5a8f0684c803606947235e584795b82fc15e85c5b09e2af393a4b1b5d7a",
+    "src/green_line/records.py": "7a0f5dbc65e724ad37d9451f92d6ebdb5674714a90ad951dcc2ca06b39bf827b",
     "src/green_line/registry.py": "9fc9b92eb9cd03c1d0ee87165c7127f181f51f4395be0fb639af2f4a34ebc3f6",
     "src/green_line/serialization.py": "2d4c45b24dde763874253489450bbe51aa866ce85cd7e0a22f7257e552ebdff8",
     "src/green_line/version.py": "b2f46bd5f21187ec2591c39bcb647db33bea6ce7f28e6b50e1d99e6f72296fa3"

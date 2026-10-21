@@ -10,7 +10,7 @@
    "source": "docs/manuscript/03_formalism.md#def:aggregation: block declared with this label",
    "source_path": "docs/manuscript/03_formalism.md",
    "source_anchor": "def:aggregation",
-   "source_line": 36,
+   "source_line": 39,
    "source_tier": "manuscript_formalism_block",
    "freshness": "active"
   },
@@ -43,7 +43,7 @@
    "source": "docs/manuscript/03_formalism.md#def:counter-signal: block declared with this label",
    "source_path": "docs/manuscript/03_formalism.md",
    "source_anchor": "def:counter-signal",
-   "source_line": 42,
+   "source_line": 45,
    "source_tier": "manuscript_formalism_block",
    "freshness": "active"
   },
@@ -54,7 +54,7 @@
    "source": "docs/manuscript/03_formalism.md#def:finding-rule: block declared with this label",
    "source_path": "docs/manuscript/03_formalism.md",
    "source_anchor": "def:finding-rule",
-   "source_line": 30,
+   "source_line": 33,
    "source_tier": "manuscript_formalism_block",
    "freshness": "active"
   },
@@ -98,7 +98,7 @@
    "source": "docs/manuscript/03_formalism.md#prop:determinism: block declared with this label",
    "source_path": "docs/manuscript/03_formalism.md",
    "source_anchor": "prop:determinism",
-   "source_line": 56,
+   "source_line": 59,
    "source_tier": "manuscript_formalism_block",
    "freshness": "active"
   },
@@ -109,7 +109,7 @@
    "source": "docs/manuscript/03_formalism.md#prop:empty-scope: block declared with this label",
    "source_path": "docs/manuscript/03_formalism.md",
    "source_anchor": "prop:empty-scope",
-   "source_line": 52,
+   "source_line": 55,
    "source_tier": "manuscript_formalism_block",
    "freshness": "active"
   },
@@ -120,7 +120,7 @@
    "source": "docs/manuscript/03_formalism.md#prop:fail-closed: block declared with this label",
    "source_path": "docs/manuscript/03_formalism.md",
    "source_anchor": "prop:fail-closed",
-   "source_line": 47,
+   "source_line": 50,
    "source_tier": "manuscript_formalism_block",
    "freshness": "active"
   }

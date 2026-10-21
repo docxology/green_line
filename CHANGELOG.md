@@ -13,6 +13,9 @@
 - Add learner-owned next-review plans, explicit episode attribution/policy,
   and same-subject declaration comparisons without ranking or scores.
 - Preserve the prior verified DOI pending Daniel's reserve-first Zenodo step.
+- Independent release audit corrections: portable calendar-date grammar,
+  refresh comparison with known dates, nonempty static scan gates, and
+  synchronized bundle provenance documentation.
 
 ## 0.1.0 — 2026-08-29
 

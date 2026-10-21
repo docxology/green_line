@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date
+from .dates import parse_iso_date
 
 from .enums import GrowthKind, GrowthStatus, SignalStatus
 
@@ -75,8 +75,8 @@ class NextReview:
             value = getattr(self, field)
             if value is not None and (not isinstance(value, str) or not value.strip()):
                 raise ValueError(f"{field} must be nonblank text or None")
-        if self.review_on is not None and date.fromisoformat(self.review_on).isoformat() != self.review_on:
-            raise ValueError("review_on must be a canonical ISO date")
+        if self.review_on is not None:
+            parse_iso_date(self.review_on)
 
 
 @dataclass(frozen=True)

@@ -14,6 +14,7 @@ from datetime import date, datetime
 
 from .model import GreenRecord, GrowthKind
 from .registry import TAG_VOCABULARY
+from .dates import parse_iso_date
 
 
 #: Phrases that counter-signal drift toward a resume, a competence
@@ -39,7 +40,7 @@ def resolve_read_date(as_of: str | date | None) -> date:
         return date.today()
     if isinstance(as_of, str):
         try:
-            return date.fromisoformat(as_of)
+            return parse_iso_date(as_of)
         except ValueError as exc:
             raise ValueError("as_of must be an ISO date in YYYY-MM-DD form") from exc
     if isinstance(as_of, datetime):
@@ -192,7 +193,7 @@ def dated_labels(
             fresh.add(label)
             continue
         try:
-            noted = date.fromisoformat(noted_on)
+            noted = parse_iso_date(noted_on)
         except (TypeError, ValueError):
             notes.append(
                 f"observation '{label}' has an unreadable date and was not counted"

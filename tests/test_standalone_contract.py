@@ -33,7 +33,9 @@ def sibling_imports(source: str) -> set[str]:
 def test_no_sibling_imports_in_code() -> None:
     offenders: list[str] = []
     for tree in ("src", "tests", "scripts"):
-        for path in (ROOT / tree).rglob("*.py"):
+        paths = sorted((ROOT / tree).rglob("*.py"))
+        assert paths, f"empty {tree} static import scan"
+        for path in paths:
             text = path.read_text(encoding="utf-8")
             offenders.extend(f"{path}: {name}" for name in sorted(sibling_imports(text)))
     assert not offenders, offenders

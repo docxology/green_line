@@ -55,3 +55,5 @@ context explicitly chooses whether episodes combine. Longitudinal comparison
 requires pinned reports for the same declared subject and policy; it reports
 added, removed, refreshed and still-missing declarations without ranking or
 inferring improvement or decline. Missing reports support no comparison.
+Refresh requires either a stale-to-present transition or established later
+calendar dating; an unknown date is never ordered before a known date.

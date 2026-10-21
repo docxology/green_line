@@ -1,5 +1,10 @@
 # Native reports and replay
 
+Dates use exactly the ASCII `YYYY-MM-DD` grammar on every supported runtime.
+Compact and week-date forms are excluded even where Python accepts them.
+Declaration policy 2.1 pins this grammar; earlier policy identities are
+explicitly rejected rather than silently reinterpreted.
+
 `green.native-reading/2.0` replaces the outcome-only `1.0` report. Old bytes
 remain historical records; `replay_reading` explicitly rejects unsupported
 schemas and evaluator/policy versions rather than guessing a migration.

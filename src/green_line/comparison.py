@@ -1,10 +1,19 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 
-from .records import GreenReading
+from .records import GreenReading, MarkerEvidence
 from .envelope import ReadingEnvelope, report_matches, validate_envelope
 from .serialization import reading_digest
+from .dates import parse_iso_date
+
+
+def _latest_known_date(evidence: MarkerEvidence) -> date | None:
+    accepted = tuple(d for d in evidence.declarations if d.disposition == "accepted")
+    if not accepted or any(d.noted_on is None for d in accepted):
+        return None
+    return max(parse_iso_date(d.noted_on) for d in accepted)
 
 
 @dataclass(frozen=True)
@@ -43,12 +52,15 @@ def compare_readings(earlier: GreenReading, earlier_envelope: ReadingEnvelope,
     missing_old = {(s.record_id, label) for s in earlier.marker_surfaces for label in s.missing}
     missing_new = {(s.record_id, label) for s in later.marker_surfaces for label in s.missing}
     stale_old = {(s.record_id, label) for s in earlier.marker_surfaces for label in s.stale}
-    dates_old = {e.label: max((d.noted_on or "" for d in e.declarations if d.disposition == "accepted"), default="")
+    dates_old = {(e.record_id, e.label): _latest_known_date(e)
                  for e in earlier.marker_evidence}
-    dates_new = {e.label: max((d.noted_on or "" for d in e.declarations if d.disposition == "accepted"), default="")
+    dates_new = {(e.record_id, e.label): _latest_known_date(e)
                  for e in later.marker_evidence}
-    refreshed = (stale_old & present_new) | {
-        pair for pair in present_old & present_new if dates_new[pair[1]] > dates_old[pair[1]]}
+    refreshed = stale_old & present_new
+    for pair in present_old & present_new:
+        old_date, new_date = dates_old[pair], dates_new[pair]
+        if old_date is not None and new_date is not None and new_date > old_date:
+            refreshed.add(pair)
     return DeclarationComparison(earlier_envelope.subject_id, reading_digest(earlier), reading_digest(later),
                                  tuple(sorted(present_new - present_old - refreshed)),
                                  tuple(sorted(present_old - present_new)), tuple(sorted(refreshed)),

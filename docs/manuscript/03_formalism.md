@@ -24,7 +24,10 @@ A record $g$ applies to an attempt $a$ exactly when $T_g \cap T_a \neq \emptyset
 ::: {.definition #def:freshness title="Freshness"}
 Given a review date $r$ and window $w$, an observation dated $t$ is **fresh**
 if $t \le r$ and $r - t \le w$; **stale** if $t \le r$ and $r - t > w$;
-**not counted** otherwise. Undated observations are fresh.
+**not counted** otherwise. Dates use exactly the calendar grammar
+YYYY-MM-DD on all supported runtimes; compact and week-date forms are not
+counted. With no freshness window, non-future dated observations remain
+fresh. Undated observations are fresh under the default policy.
 :::
 
 ::: {.definition #def:finding-rule title="Finding rule"}

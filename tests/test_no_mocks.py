@@ -22,7 +22,9 @@ def _banned_tokens() -> tuple[str, ...]:
 def test_no_mock_framework_in_source_trees() -> None:
     offenders: list[str] = []
     for tree in ("src", "tests", "scripts"):
-        for path in (ROOT / tree).rglob("*.py"):
+        paths = sorted((ROOT / tree).rglob("*.py"))
+        assert paths, f"empty {tree} no-mocks scan"
+        for path in paths:
             text = path.read_text(encoding="utf-8")
             for token in _banned_tokens():
                 if token in text:
