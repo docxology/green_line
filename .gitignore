@@ -10,5 +10,3 @@ htmlcov/
 .mypy_cache/
 graft/
 build/
-MDEOF
-echo data-docs ok

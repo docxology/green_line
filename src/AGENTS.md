@@ -1,16 +1,19 @@
 # AGENTS.md — `green_line/src`
 
-> Status: SKELETON (auto-generated 2026-08-30, fleet pass in progress).
-> Contents below must be verified and expanded by a lane agent before this
-> stub is considered accurate.
-
 ## Scope
-- Local-only path under `projects/ongoing/` — matched by the root
-  `.gitignore` rule `projects/*` and never committed.
-- Parent standard: see `/Volumes/external_drive/Git/template/projects/ongoing/AGENTS.md`.
+- Committed repository code (`src/green_line/`). Sibling Line Set repositories
+  live beside this one and are read-only from here.
+- Runtime contract: pure standard library, `requires-python >= 3.10`, no
+  third-party import anywhere under `src/`.
 
 ## Layout
-- (to be filled: list child folders/files and their roles)
+- `green_line/` — the single package; `green_line/figures/` builds the
+  deterministic SVG bundle.
 
 ## Gotchas
-- (to be filled)
+- `tests/test_standalone_contract.py` re-parses every file here as Python 3.10
+  syntax and fails on any sibling import, so keep new syntax 3.10-compatible.
+- `pythonpath` in `pyproject.toml` already covers `src`; do not add path
+  bootstrapping inside the package.
+- Never let dict or set iteration order reach output: readings, digests and
+  figures must be stable byte for byte.

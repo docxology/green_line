@@ -1,16 +1,18 @@
-# AGENTS.md — `green_line/manuscript`
-
-> Status: SKELETON (auto-generated 2026-08-30, fleet pass in progress).
-> Contents below must be verified and expanded by a lane agent before this
-> stub is considered accurate.
+# AGENTS.md — `green_line/docs/manuscript`
 
 ## Scope
-- Local-only path under `projects/ongoing/` — matched by the root
-  `.gitignore` rule `projects/*` and never committed.
-- Parent standard: see `/Volumes/external_drive/Git/template/projects/ongoing/AGENTS.md`.
+- The instrument's own paper, kept in this repository. Rendering happens
+  externally through the template engine, never through a sibling checkout.
 
 ## Layout
-- (to be filled: list child folders/files and their roles)
+- `00_abstract.md` … `06_conclusion.md` — the seven section files.
+- `config.yaml`, `references.bib` — publication metadata and bibliography.
+- `MANUSCRIPT_STATUS.md` — publication-readiness note.
 
 ## Gotchas
-- (to be filled)
+- Formalism blocks (`::: {#def:...}` / `::: {#prop:...}`) are parsed by
+  `green_line.formalism_ledger`; after moving or renaming a label, regenerate
+  the ledger, because file/anchor/line locations are pinned.
+- `tests/test_formalism_claim_ledger.py` fails on duplicate labels, references
+  to missing labels and empty scans.
+- `config.yaml` carries the last verified DOI; it is not a DOI for a new tag.
