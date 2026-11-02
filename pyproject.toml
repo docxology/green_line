@@ -7,7 +7,7 @@ name = "green_line"
 version = "0.2.0"
 description = "A capacity-under-development instrument: growth records with staged marker/counter-signal intake"
 authors = [{name = "Daniel Ari Friedman", email = "daniel@activeinference.institute"}]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = []
 
 [dependency-groups]
