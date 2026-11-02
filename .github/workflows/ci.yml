@@ -20,6 +20,4 @@ jobs:
       - uses: astral-sh/setup-uv@v10.3.3
 
       - name: Test
-        env:
-          TMPDIR: ${{ runner.temp }}
         run: uv run --frozen --no-progress pytest -q
