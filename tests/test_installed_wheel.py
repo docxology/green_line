@@ -21,8 +21,11 @@ def test_clean_installed_wheel_has_no_siblings(tmp_path):
     python = environment / "bin" / "python"
     run(["uv", "pip", "install", "--python", str(python), "--no-deps", str(wheels[0])])
     output = run([str(python), "-I", "-c", (
-        "import os, sys, importlib.util; from pathlib import Path; import green_line as g; "
-        "assert all(Path(p).resolve().is_relative_to(Path(os.environ['TMPDIR']).parents[1]) for p in (sys.prefix, sys.base_prefix)); "
+        "import sys, importlib.util, tempfile; from pathlib import Path; import green_line as g; "
+        f"project = Path({str(ROOT)!r}).resolve(); "
+        "tmp_base = Path(tempfile.gettempdir()).resolve(); "
+        "assert Path(sys.prefix).resolve().is_relative_to(tmp_base); "
+        "assert not any(Path(p).resolve().is_relative_to(project) for p in (sys.prefix, sys.base_prefix)); "
         "assert all(importlib.util.find_spec(n) is None for n in "
         "('black_line','golden_line','red_line','white_line','silver_line','violet_line','blue_line','line_set','witness_register')); "
         "r=g.read_cultivation(g.CultivationAttempt('p',frozenset({'research'})),as_of='2026-08-29'); "
