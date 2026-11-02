@@ -11,6 +11,8 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      TMPDIR: ${{ runner.temp }}/tmp
     steps:
       - uses: actions/checkout@v7
 
