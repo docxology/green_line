@@ -7,6 +7,10 @@ because metadata tests use standard-library `tomllib`. The runtime does not
 import it. Use an external GitVault interpreter and environment; see the
 release packet for the actually exercised interpreter matrix.
 
+`scripts/build_figures.py` rasterizes the cover through `rsvg-convert`, which is
+not a Python dependency: install librsvg (`apt-get install librsvg2-bin` on
+Debian/Ubuntu, `brew install librsvg` on macOS) so that it is on `PATH`.
+
 ```bash
 uv sync
 ```
