@@ -2,6 +2,9 @@
 
 ## 0.3.0 — 2026-11-06
 
+- Emit figure registry 2.0 with canonical `alt_text`, including cover metadata.
+  Preserve authored descriptions, historical figure registries, and native
+  declaration, review, report, and transport identities.
 - Document global lexical screening accurately; remove duplicate test-only
   observation intake paths while retaining the exported phrase/detection API,
   tag normalization, dated/undated parity, and STAGED noncertification boundary.

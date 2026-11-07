@@ -5,6 +5,10 @@ Deterministic SVG builders: `growth_cards_svg`, `marker_matrix_svg`,
 `build_figures(project_root)`, which writes the figures plus
 `output/figures/figure_registry.json`.
 
+Registry metadata schema `2.0` emits authored `alt_text` for every figure and
+the cover, without an `alt` alias. Native report and evaluator identities are
+unchanged; historical registries and release bundles are not rewritten.
+
 The SVG build path is pure standard library. The cover plate is additionally
 rasterized to PNG through `rsvg-convert` resolved from `PATH`; a missing
 converter fails loudly instead of reporting a cover that does not exist

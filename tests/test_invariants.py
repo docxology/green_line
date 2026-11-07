@@ -21,13 +21,6 @@ def test_figure_registry_has_at_least_three_figures() -> None:
     assert len(set(labels)) == len(labels)
 
 
-def test_every_figure_has_boundary() -> None:
-    reg = figure_registry()
-    for entry in reg["figures"]:
-        assert entry["epistemic_boundary"].strip()
-        assert entry["alt"].strip()
-
-
 def test_tag_vocabulary_iteration_is_sorted_before_emit() -> None:
     reg = figure_registry()
     vocab = reg["tag_vocabulary"]

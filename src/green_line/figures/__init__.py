@@ -606,14 +606,14 @@ def figure_registry() -> dict:
 
     Entries carry the migrated ``fig:*`` accessibility shape: a ``label``
     the manuscript can anchor with ``{#fig:...}``, the ``filename`` the
-    build actually writes, and the caption/alt/claim/boundary fields.
+    build actually writes, and the caption/alt_text/claim/boundary fields.
     """
 
     cover_entry = {
         "label": "fig:green-line-cover",
         "filename": f"{COVER_NAME}.png",
         "caption": "Cover plate showing growth drawn with its unrealized continuation left visible",
-        "alt": "A thick green stroke rises through six solid markers and continues as a dashed line through three hollow markers, on a cream field inside a thin rule frame, titled Green Line and tagged Capacity Under Development",
+        "alt_text": "A thick green stroke rises through six solid markers and continues as a dashed line through three hollow markers, on a cream field inside a thin rule frame, titled Green Line and tagged Capacity Under Development",
         "interpretive_claim": "shows growth that is explicit about its own incompleteness",
         "epistemic_boundary": "the plate is a metaphor, not a measure of any person's development",
         "source": "green_line registry, evaluator rules, and manuscript protocol",
@@ -621,7 +621,7 @@ def figure_registry() -> dict:
         "format": "PNG rasterized from deterministic SVG",
     }
     return {
-        "schema_version": "1.5",
+        "schema_version": "2.0",
         "package_version": __version__,
         "registry_digest": registry_digest(GREEN_RECORDS),
         "record_count": len(GREEN_RECORDS),
@@ -631,7 +631,7 @@ def figure_registry() -> dict:
                 "label": "fig:growth-cards",
                 "filename": "growth_cards.svg",
                 "caption": "Green Line growth records in registry declaration order",
-                "alt": "Cards for each growth record with family color and required markers",
+                "alt_text": "Cards for each growth record with family color and required markers",
                 "interpretive_claim": "shows what the registry declares about growth surfaces",
                 "epistemic_boundary": "not a competence or mastery measure",
                 "source": "green_line registry, evaluator rules, and manuscript protocol",
@@ -642,7 +642,7 @@ def figure_registry() -> dict:
                 "label": "fig:marker-matrix",
                 "filename": "marker_matrix.svg",
                 "caption": "The registry's marker contract without implying verification",
-                "alt": "Matrix of records with tags and required growth markers",
+                "alt_text": "Matrix of records with tags and required growth markers",
                 "interpretive_claim": "shows which markers each record asks a reader to look for",
                 "epistemic_boundary": "markers are declarations, not verified practice",
                 "source": "green_line registry, evaluator rules, and manuscript protocol",
@@ -653,7 +653,7 @@ def figure_registry() -> dict:
                 "label": "fig:status-flow",
                 "filename": "status_flow.svg",
                 "caption": "How reads project onto the Green Line status vocabulary",
-                "alt": "Flow from intake conditions to status vocabulary",
+                "alt_text": "Flow from intake conditions to status vocabulary",
                 "interpretive_claim": "shows the projection rules the evaluator applies",
                 "epistemic_boundary": "statuses are coverage projections, not judgments of persons",
                 "source": "green_line registry, evaluator rules, and manuscript protocol",
