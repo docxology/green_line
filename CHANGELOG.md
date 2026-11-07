@@ -21,6 +21,8 @@
 - Require an explicit destination and producer SHA for envelope generation;
   a bare command can no longer overwrite the retained historical edition or
   silently label uncommitted source as HEAD.
+- Include both required arguments in newly generated bundle invocation metadata;
+  the recorded regeneration command must remain executable after the CLI cutover.
 - Compute lexical exclusion once per normalized declaration without changing
   substring matching or date/metadata precedence.
 - Keep historical 0.2.0 reports and envelopes byte-for-byte; current replay

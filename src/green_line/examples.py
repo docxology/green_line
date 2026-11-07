@@ -143,7 +143,10 @@ def build_examples(
                 "schema_version": "green.example-bundle/1.0",
                 "source_commit": source_commit,
                 "source_hashes": source_hashes(),
-                "invocation": "scripts/gen_envelopes.py --source-commit <source_commit>",
+                "invocation": (
+                    "scripts/gen_envelopes.py --output-dir <output_dir> "
+                    "--source-commit <source_commit>"
+                ),
                 "examples": rows,
             },
             sort_keys=True,
