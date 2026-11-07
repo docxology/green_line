@@ -2,10 +2,11 @@
 
 ## Setup
 
-Runtime support is Python >=3.10. The developer suite requires Python >=3.11
-because metadata tests use standard-library `tomllib`. The runtime does not
-import it. Use an external GitVault interpreter and environment; see the
-release packet for the actually exercised interpreter matrix.
+Runtime installation and the developer suite require Python >=3.11.
+The source AST gate retains a Python 3.10 syntax-only check; this is not a
+3.10 installation or runtime-support claim. Use an external GitVault interpreter
+and environment. Published release packets record historical interpreter
+matrices, not verification of the current source.
 
 `scripts/build_figures.py` rasterizes the cover through `rsvg-convert`, which is
 not a Python dependency: install librsvg (`apt-get install librsvg2-bin` on
@@ -24,6 +25,11 @@ uv run python scripts/build_figures.py
 uv run pytest tests/test_formalism_claim_ledger.py
 uv run python scripts/gen_envelopes.py --output-dir <empty-directory> --source-commit <full-sha>
 ```
+
+The envelope command runs today's source. Supply the actual producing commit
+only from a matching source checkout, and use a new empty output directory for
+a new edition; `--source-commit` does not load that commit. Preserve the historical
+bundle in `data/envelopes/`; see its [provenance guide](../data/envelopes/README.md).
 
 ## Layout
 

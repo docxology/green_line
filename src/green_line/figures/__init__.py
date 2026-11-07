@@ -30,7 +30,7 @@ CRIMSON = "#b91c1c"
 TEAL = "#00796b"
 MINT = "#e2f0e2"
 CREAM = "#fffdf8"
-GREY = "#f4f6f4"
+GRAY = "#f4f6f4"
 BODY_FONT = "Arial,Helvetica,sans-serif"
 TITLE_FONT = "Georgia,Times New Roman,serif"
 
@@ -94,6 +94,7 @@ def text(
         attrs.append(f'letter-spacing="{letter_spacing}px"')
     return "<text " + " ".join(attrs) + ">" + esc(value) + "</text>"
 
+
 def headline(x: float, y: float, value: str, *, size: int = 28) -> str:
     return text(x, y, value, size=size, weight="700", family=TITLE_FONT, italic=True)
 
@@ -108,9 +109,19 @@ def rect(
     stroke: str = GRID,
 ) -> str:
     return (
-        '<rect x="' + str(x) + '" y="' + str(y) + '" width="' + str(w)
-        + '" height="' + str(h) + '" rx="12" fill="' + fill + '" stroke="'
-        + stroke + '" stroke-width="1.6"/>'
+        '<rect x="'
+        + str(x)
+        + '" y="'
+        + str(y)
+        + '" width="'
+        + str(w)
+        + '" height="'
+        + str(h)
+        + '" rx="12" fill="'
+        + fill
+        + '" stroke="'
+        + stroke
+        + '" stroke-width="1.6"/>'
     )
 
 
@@ -133,9 +144,13 @@ def wrap(value: str, width: int = 40) -> list[str]:
 def growth_cards_svg() -> str:
     """The registry drawn as cards in declaration order, keyed by family."""
 
-    layouts = [(60 + len(wrap(r.title, 28)) * 24 + 12,
-                60 + len(wrap(r.title, 28)) * 24 + 12 + len(wrap(r.wire, 30)) * 21 + 18)
-               for r in GREEN_RECORDS]
+    layouts = [
+        (
+            60 + len(wrap(r.title, 28)) * 24 + 12,
+            60 + len(wrap(r.title, 28)) * 24 + 12 + len(wrap(r.wire, 30)) * 21 + 18,
+        )
+        for r in GREEN_RECORDS
+    ]
     card_h = max(marker_y + 48 for _, marker_y in layouts)
     card_gap_y = card_h + 25
     footer_y = GRID_Y + ROWS * card_gap_y + 30
@@ -169,8 +184,15 @@ def growth_cards_svg() -> str:
         accent = FAMILY_FILL.get(record.kind.value, GREEN)
         body.append(rect(x, y, CARD_W, card_h, fill=CREAM, stroke=accent))
         body.append(
-            '<rect x="' + str(x) + '" y="' + str(y) + '" width="' + str(CARD_W)
-            + '" height="8" rx="4" fill="' + accent + '"/>'
+            '<rect x="'
+            + str(x)
+            + '" y="'
+            + str(y)
+            + '" width="'
+            + str(CARD_W)
+            + '" height="8" rx="4" fill="'
+            + accent
+            + '"/>'
         )
         body.append(
             text(
@@ -184,28 +206,58 @@ def growth_cards_svg() -> str:
         )
         for line_index, title_line in enumerate(wrap(record.title, 28)):
             body.append(
-                text(x + 18, y + 60 + line_index * 24, title_line, size=17, weight="700")
+                text(
+                    x + 18, y + 60 + line_index * 24, title_line, size=17, weight="700"
+                )
             )
         for line_index, wire_line in enumerate(wrap(record.wire, 30)):
             body.append(
-                text(x + 18, y + wire_y + line_index * 21, wire_line, size=15, fill=MUTED)
+                text(
+                    x + 18, y + wire_y + line_index * 21, wire_line, size=15, fill=MUTED
+                )
             )
-        body.append(text(x + 18, y + marker_y, "markers", size=15, fill=accent, weight="700"))
         body.append(
-            text(x + 18, y + marker_y + 24, " - ".join(record.required_markers), size=14, fill=INK)
+            text(x + 18, y + marker_y, "markers", size=15, fill=accent, weight="700")
+        )
+        body.append(
+            text(
+                x + 18,
+                y + marker_y + 24,
+                " - ".join(record.required_markers),
+                size=14,
+                fill=INK,
+            )
         )
     legend_x = GRID_X
-    body.append(text(legend_x, footer_y, "Growth families", size=16, fill=INK, weight="700"))
+    body.append(
+        text(legend_x, footer_y, "Growth families", size=16, fill=INK, weight="700")
+    )
     legend_x += 150
     for kind in GrowthKind:
         accent = FAMILY_FILL.get(kind.value, GREEN)
         body.append(
-            '<rect x="' + str(legend_x) + '" y="' + str(footer_y - 15)
-            + '" width="18" height="18" rx="4" fill="' + accent + '"/>'
+            '<rect x="'
+            + str(legend_x)
+            + '" y="'
+            + str(footer_y - 15)
+            + '" width="18" height="18" rx="4" fill="'
+            + accent
+            + '"/>'
         )
-        body.append(text(legend_x + 26, footer_y, kind.value.lower(), size=15, fill=INK, weight="700"))
+        body.append(
+            text(
+                legend_x + 26,
+                footer_y,
+                kind.value.lower(),
+                size=15,
+                fill=INK,
+                weight="700",
+            )
+        )
         legend_x += 46 + len(kind.value) * 9
-    body.append(text(GRID_X, footer_y + 48, "Boundary", size=16, fill=INK, weight="700"))
+    body.append(
+        text(GRID_X, footer_y + 48, "Boundary", size=16, fill=INK, weight="700")
+    )
     body.append(
         text(
             GRID_X + 106,
@@ -216,17 +268,28 @@ def growth_cards_svg() -> str:
         )
     )
     desc = (
-        str(len(GREEN_RECORDS)) + " Green Line growth records drawn as cards in registry "
-        "declaration order, colour-keyed to growth families, each naming a growth surface "
+        str(len(GREEN_RECORDS))
+        + " Green Line growth records drawn as cards in registry "
+        "declaration order, color-keyed to growth families, each naming a growth surface "
         "and its required markers."
     )
     return (
-        '<svg xmlns="http://www.w3.org/2000/svg" width="' + str(WIDTH) + '" height="'
-        + str(height) + '" viewBox="0 0 ' + str(WIDTH) + " " + str(height)
+        '<svg xmlns="http://www.w3.org/2000/svg" width="'
+        + str(WIDTH)
+        + '" height="'
+        + str(height)
+        + '" viewBox="0 0 '
+        + str(WIDTH)
+        + " "
+        + str(height)
         + '" role="img" aria-labelledby="title desc">'
         + '<title id="title">Small markers make a growth surface visible</title>'
-        + '<desc id="desc">' + desc + "</desc>"
-        + '<rect width="100%" height="100%" fill="' + PAPER + '"/>'
+        + '<desc id="desc">'
+        + desc
+        + "</desc>"
+        + '<rect width="100%" height="100%" fill="'
+        + PAPER
+        + '"/>'
         + "".join(body)
         + "</svg>"
     )
@@ -251,8 +314,11 @@ def marker_matrix_svg(records: tuple = GREEN_RECORDS) -> str:
         text(
             64,
             114,
-            "DERIVED FROM REGISTRY - " + str(len(records)) + " RECORDS - "
-            + str(sum(len(r.required_markers) for r in records)) + " REQUIRED MARKERS",
+            "DERIVED FROM REGISTRY - "
+            + str(len(records))
+            + " RECORDS - "
+            + str(sum(len(r.required_markers) for r in records))
+            + " REQUIRED MARKERS",
             size=11,
             fill=MUTED,
             weight="700",
@@ -266,26 +332,67 @@ def marker_matrix_svg(records: tuple = GREEN_RECORDS) -> str:
     def chip(x: float, y: float, label: str, *, fill: str, stroke: str) -> float:
         chip_width = max(66, 20 + len(label) * MIN_FONT * 1.6)
         body.append(
-            '<rect x="' + str(x) + '" y="' + str(y) + '" width="' + str(chip_width)
-            + '" height="30" rx="15" fill="' + fill + '" stroke="' + stroke
+            '<rect x="'
+            + str(x)
+            + '" y="'
+            + str(y)
+            + '" width="'
+            + str(chip_width)
+            + '" height="30" rx="15" fill="'
+            + fill
+            + '" stroke="'
+            + stroke
             + '" stroke-width="1.2"/>'
         )
         body.append(
-            '<text x="' + str(x + chip_width / 2) + '" y="' + str(y + 21)
-            + '" fill="' + INK + '" text-anchor="middle" font-family="' + BODY_FONT
-            + '" font-size="' + str(MIN_FONT) + 'px">' + esc(label) + "</text>"
+            '<text x="'
+            + str(x + chip_width / 2)
+            + '" y="'
+            + str(y + 21)
+            + '" fill="'
+            + INK
+            + '" text-anchor="middle" font-family="'
+            + BODY_FONT
+            + '" font-size="'
+            + str(MIN_FONT)
+            + 'px">'
+            + esc(label)
+            + "</text>"
         )
         return chip_width
 
     for index, record in enumerate(records):
         y = row_y + index * row_h
         accent = FAMILY_FILL.get(record.kind.value, GREEN)
-        body.append('<rect x="70" y="' + str(y) + '" width="8" height="36" rx="4" fill="' + accent + '"/>')
-        body.append(text(94, y + 18, str(index + 1).zfill(2) + "  " + record.title, size=16, weight="700"))
-        body.append(text(94, y + 40, record.kind.value.lower(), size=16, fill=accent, weight="700"))
+        body.append(
+            '<rect x="70" y="'
+            + str(y)
+            + '" width="8" height="36" rx="4" fill="'
+            + accent
+            + '"/>'
+        )
+        body.append(
+            text(
+                94,
+                y + 18,
+                str(index + 1).zfill(2) + "  " + record.title,
+                size=16,
+                weight="700",
+            )
+        )
+        body.append(
+            text(
+                94,
+                y + 40,
+                record.kind.value.lower(),
+                size=16,
+                fill=accent,
+                weight="700",
+            )
+        )
         x: float = 610
         for tag in sorted(record.tags):
-            x += chip(x, y + 6, tag, fill=GREY, stroke=GRID) + 6
+            x += chip(x, y + 6, tag, fill=GRAY, stroke=GRID) + 6
         x = 930
         for label in record.required_markers:
             x += chip(x, y + 6, label, fill=MINT, stroke=GREEN) + 6
@@ -301,8 +408,14 @@ def marker_matrix_svg(records: tuple = GREEN_RECORDS) -> str:
         body.append(text(174, legend_y + offset * 24, sentence, size=16, fill=MUTED))
     height = legend_y + 24 + 44
     return (
-        '<svg xmlns="http://www.w3.org/2000/svg" width="' + str(width) + '" height="'
-        + str(height) + '" viewBox="0 0 ' + str(width) + " " + str(height)
+        '<svg xmlns="http://www.w3.org/2000/svg" width="'
+        + str(width)
+        + '" height="'
+        + str(height)
+        + '" viewBox="0 0 '
+        + str(width)
+        + " "
+        + str(height)
         + '" role="img" aria-label="Green Line growth-marker contract matrix">'
         + "".join(body)
         + "</svg>"
@@ -342,7 +455,11 @@ def status_flow_svg() -> str:
         fill = STATUS_FILL[status]
         body.append(rect(x, 200, 200, 120, fill=PANEL, stroke=fill))
         body.append(
-            '<rect x="' + str(x) + '" y="200" width="200" height="10" rx="5" fill="' + fill + '"/>'
+            '<rect x="'
+            + str(x)
+            + '" y="200" width="200" height="10" rx="5" fill="'
+            + fill
+            + '"/>'
         )
         body.append(text(x + 16, 244, status, size=18, fill=fill, weight="700"))
         for li, line_txt in enumerate(wrap(label, 22)):
@@ -360,13 +477,18 @@ def status_flow_svg() -> str:
     width = 1400
     height = 440
     return (
-        '<svg xmlns="http://www.w3.org/2000/svg" width="' + str(width) + '" height="'
-        + str(height) + '" viewBox="0 0 ' + str(width) + " " + str(height)
+        '<svg xmlns="http://www.w3.org/2000/svg" width="'
+        + str(width)
+        + '" height="'
+        + str(height)
+        + '" viewBox="0 0 '
+        + str(width)
+        + " "
+        + str(height)
         + '" role="img" aria-label="Green Line status flow">'
         + "".join(body)
         + "</svg>"
     )
-
 
 
 COVER_NAME = "green_line_cover"
@@ -460,8 +582,14 @@ def green_line_cover_svg() -> str:
         )
     )
     return (
-        '<svg xmlns="http://www.w3.org/2000/svg" width="' + str(width) + '" height="'
-        + str(height) + '" viewBox="0 0 ' + str(width) + " " + str(height)
+        '<svg xmlns="http://www.w3.org/2000/svg" width="'
+        + str(width)
+        + '" height="'
+        + str(height)
+        + '" viewBox="0 0 '
+        + str(width)
+        + " "
+        + str(height)
         + '" role="img" aria-labelledby="cover-title cover-desc">'
         + '<title id="cover-title">Green Line: capacity under development</title>'
         + '<desc id="cover-desc">On a pale green cream field inside a thin rule '
@@ -469,9 +597,7 @@ def green_line_cover_svg() -> str:
         "markers and continues as a dashed line through three hollow markers, "
         "with faint practice ticks along the base; the small-caps title Green "
         "Line sits top-left and the small-caps tagline Capacity Under "
-        'Development sits bottom-right.</desc>'
-        + "".join(body)
-        + "</svg>"
+        "Development sits bottom-right.</desc>" + "".join(body) + "</svg>"
     )
 
 
@@ -505,7 +631,7 @@ def figure_registry() -> dict:
                 "label": "fig:growth-cards",
                 "filename": "growth_cards.svg",
                 "caption": "Green Line growth records in registry declaration order",
-                "alt": "Cards for each growth record with family colour and required markers",
+                "alt": "Cards for each growth record with family color and required markers",
                 "interpretive_claim": "shows what the registry declares about growth surfaces",
                 "epistemic_boundary": "not a competence or mastery measure",
                 "source": "green_line registry, evaluator rules, and manuscript protocol",

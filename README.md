@@ -10,8 +10,8 @@ skills not yet mastered — with marker/counter-signal staging.
 yet mastered, with marker/counter-signal staging.
 
 **What it is never:** A resume, a competence certification, or a virtue signal.
-Observations phrased as certification or credential language are staged aside
-by the intake with a note, never scored.
+Observation labels matching the global case-insensitive substring policy are
+staged aside with a note, never scored; this is lexical screening, not intent detection.
 
 **Opus stage:** None — a stageless line is the designed outcome (all four
 classical stages are allocated; see line_set `docs/extensibility.md`).
@@ -23,7 +23,7 @@ from green_line import CultivationAttempt, Observation, read_cultivation
 
 reading = read_cultivation(
     CultivationAttempt(
-        description="Practising formal proof review with a mentor",
+        description="Practicing formal proof review with a mentor",
         tags=frozenset({"research", "teaching"}),
         dated_observations=(Observation("mentor", "2026-08-01"),),
     ),
@@ -33,11 +33,14 @@ reading = read_cultivation(
 print(reading.status.value)
 ```
 
+Installation and development require Python >=3.11. STAGED records declared
+marker coverage only, not demonstrated skill, certification, or permission.
+
 ## Verify
 
 ```bash
 uv sync
-uv run pytest tests/ --cov=src --cov-report=term   # all green, cov >= 90
+uv run pytest tests/ --cov=src --cov-report=term   # configured coverage floor: 90
 uv run ruff check src tests scripts
 uv run python scripts/build_figures.py
 ```
@@ -48,21 +51,22 @@ is needed for any of these commands. See STANDALONE.md.
 Native reports retain replay context and typed marker evidence; see
 [native reports](docs/native_reports.md), [envelope checks](docs/envelopes.md),
 and [learner-owned review records](docs/practice_records.md). The
-[review implementation record](docs/review_20261020.md) traces the changes.
+[historical review implementation record](docs/review_20261020.md) traces the 0.2.0 changes.
 Publication follows the [reserve-first procedure](docs/publication.md).
 
 ## The Line Set
 
 This work is one of ten in the Line Set family — eight instruments, their
 cross-line reader, and the witness register that co-registers their report
-envelopes without aggregation:
+envelopes without aggregation. Sources may be optional or access-controlled;
+the declared roster does not promise public availability:
 
 - [Black Line](https://github.com/docxology/black_line) — the practice registry of realized craft
 - [Golden Line](https://github.com/docxology/golden_line) — the aspiration and horizon registry
 - [Red Line](https://github.com/docxology/red_line) — the cognitive-security registry of self-assessments
 - [White Line](https://github.com/docxology/white_line) — the absence and omission ledger
 - [Silver Line](https://github.com/docxology/silver_line) — the memory-and-succession instrument
-- [Violet Line](https://github.com/docxology/violet_line) — the consent ledger of affected parties
+- Violet Line — the consent ledger of affected parties; source access may be restricted
 - [Blue Line](https://github.com/docxology/blue_line) — the stewardship instrument for maintained commitments
 - [The Line Set](https://github.com/docxology/line_set) — the cross-line set reader holding instruments apart
 - [The Witness Register](https://github.com/docxology/witness_register) — co-registration without aggregation

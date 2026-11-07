@@ -19,13 +19,20 @@ envelope, including subject, references, version and nonclaims. It changes
 when those declarations change even if `report_matches` stays true. A digest
 is an equality check, not source verification or authenticated authorship.
 
-`data/envelopes/manifest.json` binds each envelope to the retained report,
-source commit, source file hashes and explicit invocation context. Native
-report files contain exactly the canonical bytes, with no trailing newline,
-so their whole-file SHA-256 equals `report_ref`. Regenerate into an empty
-directory to check byte identity. The named same-subject fixture is used
-directly; `gap_list` is explicitly reference-only, not a scored declaration.
-Its historic witness subject remains pinned to its original version.
+`data/envelopes/manifest.json` describes the historical 0.2.0 edition: each
+retained report, caller-declared producer commit, source file hashes and explicit
+invocation context. Native report files contain exactly the canonical bytes,
+with no trailing newline, so their whole-file SHA-256 equals `report_ref`.
+Historical byte reproduction requires the matching source checkout and hashes,
+not just passing its SHA to today's generator. `--source-commit` labels the
+running source; it does not load or verify a historical checkout. Both
+`--source-commit` and `--output-dir` are required: no implicit HEAD declaration
+or historical output directory is selected. Generate 0.3.0 into
+`data/current-envelopes/0.3.0/` only after its producer source is committed,
+using that actual full SHA and a new empty destination; see
+the [edition recipe](../data/envelopes/README.md). The named same-subject fixture
+is used directly; `gap_list` is reference-only, not a scored declaration.
+Its historical witness subject remains pinned to its original version.
 
 Siblings may co-register native status without interpreting, comparing or
 aggregating it. The local frozen field specification remains the standalone

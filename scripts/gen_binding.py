@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-"""Emit data/binding_declaration.json — the exact LineEntry kwargs a
-line_set maintainer will append. Prepared here; applied there."""
+"""Emit owner-supplied metadata for Green Line's existing declaration.
+
+The Line Set owner assigns its working position. This file is neither an
+instruction to append a duplicate Green Line nor authority to admit a color.
+"""
 
 from __future__ import annotations
 

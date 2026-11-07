@@ -7,6 +7,6 @@ Run from the repository root:
 The suite uses real data and real temp directories and no mocking framework
 (`test_no_mocks.py`). Static gates reject empty scan sets and prove there is no
 sibling import anywhere in `src/`, `tests/` or `scripts/`
-(`test_standalone_contract.py`, `test_audit_regressions.py`). Metadata tests
-read `pyproject.toml` with standard-library `tomllib`, so the developer suite
-needs Python >= 3.11 while the runtime stays >= 3.10.
+(`test_standalone_contract.py`, `test_audit_regressions.py`). Runtime installation
+and the developer suite require Python >= 3.11. Metadata tests use standard-library
+`tomllib`; the retained Python 3.10 AST check establishes syntax compatibility only.

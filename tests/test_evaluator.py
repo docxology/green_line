@@ -1,4 +1,4 @@
-"""Evaluator behaviour: staged reads, fail-closed paths, empty outcomes."""
+"""Evaluator behavior: staged reads, fail-closed paths, empty outcomes."""
 
 from __future__ import annotations
 
@@ -83,19 +83,19 @@ def test_non_record_registry_entry_fails_closed() -> None:
 
 def test_invalid_as_of_raises() -> None:
     with pytest.raises(ValueError):
-        read_cultivation(
-            CultivationAttempt(description="x"), as_of="not-a-date"
-        )
+        read_cultivation(CultivationAttempt(description="x"), as_of="not-a-date")
     with pytest.raises(TypeError):
         read_cultivation(
-            CultivationAttempt(description="x"), as_of=20260829  # type: ignore[arg-type]
+            CultivationAttempt(description="x"),
+            as_of=20260829,  # type: ignore[arg-type]
         )
 
 
 def test_invalid_max_age_raises() -> None:
     with pytest.raises(TypeError):
         read_cultivation(
-            CultivationAttempt(description="x"), max_observation_age_days="60"  # type: ignore[arg-type]
+            CultivationAttempt(description="x"),
+            max_observation_age_days="60",  # type: ignore[arg-type]
         )
     with pytest.raises(ValueError):
         read_cultivation(
@@ -169,7 +169,9 @@ def test_dated_evidence_not_a_collection() -> None:
         as_of="2026-08-29",
     )
     assert reading.status is GrowthStatus.NEEDS_MARKER
-    assert reading.intake_notes == ("dated observation declaration is not a collection of records",)
+    assert reading.intake_notes == (
+        "dated observation declaration is not a collection of records",
+    )
 
 
 def test_non_iterable_records_fail_closed() -> None:
@@ -190,9 +192,7 @@ def test_registry_digest_failure_fails_closed_with_note() -> None:
         def canonical(self) -> dict[str, object]:
             raise ValueError("hostile canonicalization")
 
-    hostile = _HostileRecord(
-        "hostile", "t", "w", frozenset({"research"}), ("m",)
-    )
+    hostile = _HostileRecord("hostile", "t", "w", frozenset({"research"}), ("m",))
     reading = read_cultivation(
         CultivationAttempt(description="x", tags=frozenset({"research"})),
         (hostile,),
@@ -213,9 +213,7 @@ def test_present_markers_reason_lists_partially_covered() -> None:
         ),
         as_of="2026-08-29",
     )
-    apprentice = next(
-        f for f in reading.findings if f.record_id == "apprentice-review"
-    )
+    apprentice = next(f for f in reading.findings if f.record_id == "apprentice-review")
     assert apprentice.status is SignalStatus.NEEDS_REWORK
     assert any(
         reason.startswith("markers already present: mentor")

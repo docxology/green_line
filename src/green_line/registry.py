@@ -21,7 +21,7 @@ GREEN_RECORDS: tuple[GreenRecord, ...] = (
     GreenRecord(
         "apprentice-review",
         "Review under a named mentor",
-        "Practise the skill with review from someone who already carries it.",
+        "Practice the skill with review from someone who already carries it.",
         frozenset({"research", "analysis", "writing"}),
         ("mentor", "session_log"),
         GrowthKind.APPRENTICESHIP,
@@ -76,7 +76,7 @@ GREEN_RECORDS: tuple[GreenRecord, ...] = (
     ),
     GreenRecord(
         "stated-uncertainty",
-        "State what is not yet known alongside what is practised",
+        "State what is not yet known alongside what is practiced",
         "A practice note without its uncertainty can overstate the capacity.",
         frozenset({"research", "analysis"}),
         ("uncertainty", "limits"),

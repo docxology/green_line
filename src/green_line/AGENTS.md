@@ -1,7 +1,7 @@
 # AGENTS.md — `green_line/src/green_line`
 
 ## Scope
-- The instrument's runtime package: pure standard library, Python >= 3.10.
+- The instrument's runtime package: pure standard library, Python >= 3.11.
   Nothing here reads a sibling repository or the network.
 
 ## Layout

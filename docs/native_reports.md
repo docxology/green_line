@@ -25,6 +25,15 @@ identity; registry record order is not. Findings sort by record ID.
   digest, declared vocabulary, instrument ID, and episode policy. A different
   window is visible even when it produces the same status.
 
+Registry title and instruction wording are content, not decoration. The current
+American-English registry and worked-attempt description produce new registry,
+input, report, envelope, and provenance identities even where findings stay the
+same. The registry digest is the native content revision marker; schema 2.0,
+declaration policy 2.1, and scoring semantics are unchanged. Current reports pin
+evaluator 0.3.0. Retained historical 0.2.0 bundles require their original producer
+for replay; the current evaluator rejects that older identity rather than
+silently migrating or relabeling the report.
+
 Description prose is not archived. Its trimmed-text digest and validity flag
 are enough for replay, since its wording does not affect marker matching.
 The owner may retain the original description in restricted storage; a

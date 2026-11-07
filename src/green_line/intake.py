@@ -56,7 +56,9 @@ def resolve_max_age(max_age_days: int | None) -> int | None:
     if max_age_days is None:
         return None
     if isinstance(max_age_days, bool) or not isinstance(max_age_days, int):
-        raise TypeError("max_observation_age_days must be a non-negative integer or None")
+        raise TypeError(
+            "max_observation_age_days must be a non-negative integer or None"
+        )
     if max_age_days < 0:
         raise ValueError("max_observation_age_days must be non-negative")
     return max_age_days
@@ -68,9 +70,13 @@ def registry_shape_error(
 ) -> str | None:
     """Return a blocking note when a registry cannot be safely scored."""
 
-    if not isinstance(vocabulary, frozenset) or not vocabulary or any(
-        not isinstance(tag, str) or not tag or tag != tag.strip().lower()
-        for tag in vocabulary
+    if (
+        not isinstance(vocabulary, frozenset)
+        or not vocabulary
+        or any(
+            not isinstance(tag, str) or not tag or tag != tag.strip().lower()
+            for tag in vocabulary
+        )
     ):
         return "registry vocabulary must be a nonempty frozenset of canonical tags"
     seen_ids: set[str] = set()
@@ -116,7 +122,7 @@ def registry_shape_error(
 
 
 def clean_labels(raw: object, field: str) -> tuple[frozenset[str], tuple[str, ...]]:
-    """Normalize a declared label collection without letting bad input crash.
+    """Normalize tags independently of observation counter-signal screening.
 
     Returns the kept labels (stripped, lowercased) and intake notes for every
     declaration or token that had to be ignored.
@@ -132,12 +138,7 @@ def clean_labels(raw: object, field: str) -> tuple[frozenset[str], tuple[str, ..
         if not isinstance(token, str) or not token.strip():
             notes.append(f"ignored a malformed {field} label")
             continue
-        label = token.strip().lower()
-        note = observation_exclusion(label) if field == "observation" else None
-        if note:
-            notes.append(note)
-        else:
-            kept.add(label)
+        kept.add(token.strip().lower())
     return frozenset(kept), tuple(notes)
 
 
@@ -155,57 +156,3 @@ def observation_exclusion(label: str) -> str | None:
             "drift and was set aside rather than counted"
         )
     return None
-
-
-def dated_labels(
-    records: object,
-    read_date: date,
-    max_age_days: int | None,
-) -> tuple[frozenset[str], frozenset[str], tuple[str, ...]]:
-    """Split dated observations into fresh labels, stale labels, and notes.
-
-    Undated records count as fresh. Future-dated or unreadable dates are
-    never counted; they are surfaced as notes so the declarer can fix them.
-    Counter-signal labels are staged aside with a note and never counted.
-    """
-
-    if isinstance(records, str) or not isinstance(records, Iterable):
-        return (
-            frozenset(),
-            frozenset(),
-            ("dated observation declaration is not a collection of records",),
-        )
-    fresh: set[str] = set()
-    stale: set[str] = set()
-    notes: list[str] = []
-    for item in records:
-        raw_label = getattr(item, "label", None)
-        if not isinstance(raw_label, str) or not raw_label.strip():
-            notes.append("ignored a malformed observation label")
-            continue
-        label = raw_label.strip().lower()
-        note = observation_exclusion(label)
-        if note:
-            notes.append(note)
-            continue
-        noted_on = getattr(item, "noted_on", None)
-        if noted_on is None:
-            fresh.add(label)
-            continue
-        try:
-            noted = parse_iso_date(noted_on)
-        except (TypeError, ValueError):
-            notes.append(
-                f"observation '{label}' has an unreadable date and was not counted"
-            )
-            continue
-        if noted > read_date:
-            notes.append(
-                f"observation '{label}' is dated in the future and was not counted"
-            )
-            continue
-        if max_age_days is not None and (read_date - noted).days > max_age_days:
-            stale.add(label)
-            continue
-        fresh.add(label)
-    return frozenset(fresh), frozenset(stale), tuple(notes)

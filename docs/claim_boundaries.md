@@ -9,9 +9,14 @@ first person and underclaim.
   labels at a stated review date. That is all a read establishes.
 - I counter-signal lexical drift toward certification, credential, resume,
   and virtue language, and I stage such observations aside with notes.
-  I apply the same substring rule to ordinary and dated labels. This can
-  exclude labels such as `masterclass_practice`; it is not intent detection.
-  Tags are matching declarations and are normalized separately.
+  I apply one global case-insensitive substring rule to ordinary and dated
+  labels before metadata or date checks, including under `dated_only`.
+  The phrases are `certified`, `certification`, `credential`, `expert`,
+  `master`, `resume`, `accredited`, and `virtue`, exported as
+  `COUNTER_SIGNAL_PHRASES`; `is_counter_signal` exposes the same lexical match.
+  This can exclude labels such as `masterclass_practice`; it is not intent
+  detection. `GreenRecord` has no per-record screening field. Tags are matching
+  declarations and are normalized separately; commentary is not a scored label.
 - I archive typed declarations and evaluation context for deterministic replay.
   Hashes identify bytes and declared context, not truth, authorship or custody.
 - I can record my next-review question and practice step without upgrading

@@ -3,7 +3,7 @@
 ## Scope
 - Committed repository code (`src/green_line/`). Sibling Line Set repositories
   live beside this one and are read-only from here.
-- Runtime contract: pure standard library, `requires-python >= 3.10`, no
+- Runtime contract: pure standard library, `requires-python >= 3.11`, no
   third-party import anywhere under `src/`.
 
 ## Layout
@@ -11,8 +11,8 @@
   deterministic SVG bundle.
 
 ## Gotchas
-- `tests/test_standalone_contract.py` re-parses every file here as Python 3.10
-  syntax and fails on any sibling import, so keep new syntax 3.10-compatible.
+- `tests/test_standalone_contract.py` retains a Python 3.10 syntax-only check
+  and rejects sibling imports. That check does not promise installation on 3.10.
 - `pythonpath` in `pyproject.toml` already covers `src`; do not add path
   bootstrapping inside the package.
 - Never let dict or set iteration order reach output: readings, digests and

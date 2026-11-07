@@ -25,7 +25,7 @@ def staged_attempt() -> CultivationAttempt:
     """An attempt whose declared markers fully cover one record."""
 
     return CultivationAttempt(
-        description="Practising proof review with a named mentor",
+        description="Practicing proof review with a named mentor",
         tags=frozenset({"research", "teaching"}),
         dated_observations=(
             Observation("mentor", "2026-08-15"),
@@ -42,4 +42,10 @@ def witness_root() -> Path:
     return sibling
 
 
-__all__ = ["CultivationAttempt", "GreenRecord", "GrowthKind", "GrowthStatus", "Observation"]
+__all__ = [
+    "CultivationAttempt",
+    "GreenRecord",
+    "GrowthKind",
+    "GrowthStatus",
+    "Observation",
+]

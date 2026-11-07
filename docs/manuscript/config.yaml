@@ -1,7 +1,7 @@
 paper:
   title: "Green Line: a capacity-under-development instrument"
-  version: "0.2.0"
-  date: "2026-10-21"
+  version: "0.3.0"
+  date: "2026-11-06"
   cover:
     image: "../../output/figures/green_line_cover.png"
 

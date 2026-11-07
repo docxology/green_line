@@ -95,8 +95,8 @@ def observation_dispositions(snapshot: dict, read_date: date, max_age: int | Non
             if label is None:
                 code, disposition = "MALFORMED_LABEL", "excluded"
                 note = "ignored a malformed observation label"
-            elif observation_exclusion(label):
-                code, disposition, note = "COUNTER_SIGNAL", "excluded", observation_exclusion(label)
+            elif (exclusion := observation_exclusion(label)) is not None:
+                code, disposition, note = "COUNTER_SIGNAL", "excluded", exclusion
             elif entry.get("malformed_metadata"):
                 code, disposition, note = "MALFORMED_METADATA", "excluded", f"observation '{label}' has malformed attribution and was not counted"
             elif noted is not None:

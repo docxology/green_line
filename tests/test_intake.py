@@ -6,10 +6,15 @@ from datetime import date, datetime
 
 import pytest
 
-from green_line import COUNTER_SIGNAL_PHRASES, Observation, is_counter_signal
+from green_line import (
+    CultivationAttempt,
+    GreenRecord,
+    Observation,
+    is_counter_signal,
+    read_cultivation,
+    read_with_surfaces,
+)
 from green_line.intake import (
-    clean_labels,
-    dated_labels,
     registry_shape_error,
     resolve_max_age,
     resolve_read_date,
@@ -19,62 +24,81 @@ from green_line.intake import (
 def test_counter_signal_detection() -> None:
     assert is_counter_signal("certified as expert")
     assert is_counter_signal("Added to my resume")
-    assert is_counter_signal("virtue signalling note")
+    assert is_counter_signal("virtue signaling note")
     assert not is_counter_signal("mentor session held")
 
 
-def test_clean_labels_drops_malformed() -> None:
-    kept, notes = clean_labels(["  Mentor ", "  ", 42, None], "observation")
-    assert kept == frozenset({"mentor"})
-    assert len(notes) >= 2
+def test_observations_drop_malformed_labels() -> None:
+    attempt = CultivationAttempt(
+        "practice", frozenset({"research"}), ["  Mentor ", "  ", 42, None]
+    )
+    record = GreenRecord("one", "Practice", "w", attempt.tags, ("mentor",))
+    reading, surfaces = read_with_surfaces(attempt, (record,), as_of="2026-08-29")
+    assert surfaces[0].present == ("mentor",)
+    assert reading.status.value == "STAGED"
+    assert [d.reason_code for d in reading.intake_dispositions].count(
+        "MALFORMED_LABEL"
+    ) == 3
 
 
-def test_clean_labels_non_collection() -> None:
-    kept, notes = clean_labels(42, "observation")
-    assert kept == frozenset()
-    assert notes == ("observation declaration is not a collection of labels and was ignored",)
+@pytest.mark.parametrize("channel", ("observations", "dated_observations"))
+def test_observation_non_collection_is_excluded(channel) -> None:
+    attempt = CultivationAttempt("practice", frozenset({"research"}), **{channel: 42})
+    record = GreenRecord("one", "Practice", "w", attempt.tags, ("mentor",))
+    reading = read_cultivation(attempt, (record,), as_of="2026-08-29")
+    assert reading.status.value == "NEEDS_MARKER"
+    assert [
+        (d.channel, d.disposition, d.reason_code) for d in reading.intake_dispositions
+    ] == [(channel, "excluded", "MALFORMED_COLLECTION")]
 
 
-def test_dated_labels_future_and_unreadable() -> None:
-    fresh, stale, notes = dated_labels(
-        (
+def test_dated_observations_future_and_unreadable() -> None:
+    attempt = CultivationAttempt(
+        "practice",
+        frozenset({"research"}),
+        dated_observations=(
             Observation("ok", "2026-08-01"),
             Observation("future", "2099-01-01"),
             Observation("bad", "not-a-date"),
             Observation("undated"),
         ),
-        date(2026, 8, 29),
-        60,
     )
-    assert "ok" in fresh and "undated" in fresh
-    assert not stale
-    assert len(notes) == 2
-
-
-def test_dated_labels_stale_window() -> None:
-    fresh, stale, _ = dated_labels(
-        (Observation("old", "2020-01-01"), Observation("new", "2026-08-01")),
-        date(2026, 8, 29),
-        60,
+    record = GreenRecord(
+        "one", "Practice", "w", attempt.tags, ("ok", "future", "bad", "undated")
     )
-    assert stale == frozenset({"old"})
-    assert "new" in fresh
-
-
-def test_dated_labels_counter_signal_set_aside() -> None:
-    fresh, stale, notes = dated_labels(
-        (Observation("certified", "2026-08-01"),),
-        date(2026, 8, 29),
-        None,
+    reading, surfaces = read_with_surfaces(
+        attempt, (record,), as_of="2026-08-29", max_observation_age_days=60
     )
-    assert not fresh and not stale
-    assert any("set aside" in note for note in notes)
+    assert surfaces[0].present == ("ok", "undated")
+    assert surfaces[0].missing == ("future", "bad")
+    assert not surfaces[0].stale
+    assert {d.label: d.reason_code for d in reading.intake_dispositions} == {
+        "ok": "CURRENT",
+        "future": "FUTURE",
+        "bad": "INVALID_DATE",
+        "undated": "UNDATED",
+    }
 
 
-def test_dated_labels_not_a_collection() -> None:
-    fresh, stale, notes = dated_labels("nope", date(2026, 8, 29), None)
-    assert not fresh and not stale
-    assert notes == ("dated observation declaration is not a collection of records",)
+def test_dated_observations_stale_window() -> None:
+    attempt = CultivationAttempt(
+        "practice",
+        frozenset({"research"}),
+        dated_observations=(
+            Observation("old", "2020-01-01"),
+            Observation("new", "2026-08-01"),
+        ),
+    )
+    record = GreenRecord("one", "Practice", "w", attempt.tags, ("old", "new"))
+    reading, surfaces = read_with_surfaces(
+        attempt, (record,), as_of="2026-08-29", max_observation_age_days=60
+    )
+    assert surfaces[0].present == ("new",)
+    assert surfaces[0].stale == surfaces[0].missing == ("old",)
+    assert {d.label: d.disposition for d in reading.intake_dispositions} == {
+        "old": "stale",
+        "new": "accepted",
+    }
 
 
 def test_resolve_read_date_forms() -> None:
@@ -117,31 +141,9 @@ def test_registry_shape_error_paths() -> None:
     assert registry_shape_error((ok,)) is None
 
 
-def test_counter_signal_phrase_count_is_derivable() -> None:
-    assert len(COUNTER_SIGNAL_PHRASES) == 8
-
-
-def test_counter_signal_labels_are_staged_aside() -> None:
-    fresh, stale, notes = dated_labels(
-        (Observation("certified expert", None),), date(2026, 8, 29), 60
-    )
-    assert not fresh and not stale
-    assert any("counter-signals" in note for note in notes)
-
-
-def test_dated_label_without_usable_label_is_ignored() -> None:
-    fresh, stale, notes = dated_labels(
-        (Observation("   ", None),), date(2026, 8, 29), 60
-    )
-    assert not fresh and not stale
-    assert notes == ("ignored a malformed observation label",)
-
-
 def test_registry_shape_error_duplicate_id() -> None:
     from green_line import GREEN_RECORDS, GreenRecord
 
     ok = GREEN_RECORDS[0]
-    duplicate = GreenRecord(
-        ok.id, "same id", "w", frozenset({"research"}), ("m",)
-    )
+    duplicate = GreenRecord(ok.id, "same id", "w", frozenset({"research"}), ("m",))
     assert "duplicate id" in (registry_shape_error((ok, duplicate)) or "")

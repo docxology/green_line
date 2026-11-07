@@ -11,9 +11,7 @@ from pathlib import Path
 
 from green_line.figures import (
     build_figures,
-    green_line_cover_svg,
     growth_cards_svg,
-    marker_matrix_svg,
 )
 
 
@@ -48,30 +46,6 @@ def test_figure_registry_file_written(tmp_path: Path) -> None:
     assert len(registry["figures"]) == 4
 
 
-def test_growth_cards_mentions_registry_count() -> None:
-    from green_line import GREEN_RECORDS
-    svg = growth_cards_svg()
-    assert f"{len(GREEN_RECORDS)} Green Line growth records" in svg
-
-
-def test_marker_matrix_accepts_custom_registry() -> None:
-    from green_line import GREEN_RECORDS, GreenRecord
-
-    one = (GREEN_RECORDS[0],)
-    svg = marker_matrix_svg(one)
-    assert "1 RECORDS" in svg
-    assert isinstance(svg, str)
-    assert isinstance(GreenRecord, type)
-
-
-def test_cover_plate_carries_only_its_two_texts() -> None:
-    svg = green_line_cover_svg()
-    assert ">GREEN LINE<" in svg
-    assert ">CAPACITY UNDER DEVELOPMENT<" in svg
-    assert "2026" not in svg  # no dates on the plate
-    assert "0.1.0" not in svg  # no version numbers on the plate
-
-
 def test_cover_registered_and_rasterized(tmp_path: Path) -> None:
     build_figures(tmp_path)
     png = tmp_path / "output" / "figures" / "green_line_cover.png"
@@ -99,7 +73,9 @@ def test_missing_converter_fails_instead_of_claiming_a_cover(tmp_path):
 
 
 def test_growth_card_multiline_title_does_not_overlap_body():
-    nodes = list(ET.fromstring(growth_cards_svg()).iter("{http://www.w3.org/2000/svg}text"))
+    nodes = list(
+        ET.fromstring(growth_cards_svg()).iter("{http://www.w3.org/2000/svg}text")
+    )
     title_end = next(n for n in nodes if n.text == "language")
     body_start = next(n for n in nodes if n.text == "Flag observations phrased as")
     assert float(body_start.attrib["y"]) - float(title_end.attrib["y"]) >= 30

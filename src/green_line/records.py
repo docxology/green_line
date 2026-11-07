@@ -12,10 +12,10 @@ from .enums import GrowthKind, GrowthStatus, SignalStatus
 class GreenRecord:
     """One capacity under development: a record, its tags, and required markers.
 
-    ``counter_signals`` are labels whose presence indicates the record has
-    drifted toward what it must never become (a resume, a certification, a
-    virtue signal); the intake stages them aside with notes rather than
-    scoring them.
+    Observation labels are screened globally using
+    ``COUNTER_SIGNAL_PHRASES`` and case-insensitive substring matching, not
+    a per-record field. Matching labels are excluded with notes before
+    date or metadata checks; tags are normalized separately.
     """
 
     id: str
@@ -71,7 +71,12 @@ class NextReview:
     evidence_would_change: str | None = None
 
     def __post_init__(self) -> None:
-        for field in ("next_practice_step", "review_question", "review_on", "evidence_would_change"):
+        for field in (
+            "next_practice_step",
+            "review_question",
+            "review_on",
+            "evidence_would_change",
+        ):
             value = getattr(self, field)
             if value is not None and (not isinstance(value, str) or not value.strip()):
                 raise ValueError(f"{field} must be nonblank text or None")

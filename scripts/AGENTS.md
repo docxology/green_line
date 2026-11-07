@@ -10,7 +10,7 @@ unexpected arguments, and delegate to one package entrypoint.
 
 - `build_figures.py` — calls `green_line.figures.build_figures()` and prints the figure count
 - `gen_binding.py` — writes `data/binding_declaration.json`
-- `gen_envelopes.py` — writes the witness envelopes under `data/envelopes/` via `green_line`'s public API
+- `gen_envelopes.py` — generates a new edition through the public API; requires an explicit destination and producer SHA rather than overwrite historical `data/envelopes/` by default
 - `gen_formalism_ledger.py` — regenerates `data/formalism_claim_ledger.json` via `green_line.formalism_ledger.build_ledger()`
 
 ## Canonical commands
@@ -19,6 +19,6 @@ unexpected arguments, and delegate to one package entrypoint.
 uv run pytest tests/
 uv run python scripts/gen_formalism_ledger.py
 uv run python scripts/gen_binding.py
-uv run python scripts/gen_envelopes.py
+uv run python scripts/gen_envelopes.py --output-dir output/example-bundles/<actual-producer-sha> --source-commit <actual-producer-sha>
 uv run python scripts/build_figures.py
 ```
