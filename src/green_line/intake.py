@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from datetime import date, datetime
+from typing import TypeGuard
 
 from .model import GreenRecord, GrowthKind
 from .registry import TAG_VOCABULARY
@@ -64,6 +65,14 @@ def resolve_max_age(max_age_days: int | None) -> int | None:
     return max_age_days
 
 
+def is_unicode_text(value: object) -> TypeGuard[str]:
+    """Recognize strings encodable as strict UTF-8, without repairing code units."""
+
+    return isinstance(value, str) and all(
+        not 0xD800 <= ord(character) <= 0xDFFF for character in value
+    )
+
+
 def registry_shape_error(
     records: tuple[GreenRecord, ...],
     vocabulary: frozenset[str] = TAG_VOCABULARY,
@@ -74,7 +83,7 @@ def registry_shape_error(
         not isinstance(vocabulary, frozenset)
         or not vocabulary
         or any(
-            not isinstance(tag, str) or not tag or tag != tag.strip().lower()
+            not is_unicode_text(tag) or not tag or tag != tag.strip().lower()
             for tag in vocabulary
         )
     ):
@@ -84,7 +93,7 @@ def registry_shape_error(
         if not isinstance(record, GreenRecord):
             return f"record registry entry {index} is not a GreenRecord record"
         if any(
-            not isinstance(value, str) or not value.strip()
+            not is_unicode_text(value) or not value.strip()
             for value in (record.id, record.title, record.wire)
         ):
             return f"record registry entry {index} has blank or non-text fields"
@@ -96,7 +105,7 @@ def registry_shape_error(
         if (
             not isinstance(record.tags, frozenset)
             or not record.tags
-            or any(not isinstance(tag, str) or not tag.strip() for tag in record.tags)
+            or any(not is_unicode_text(tag) or not tag.strip() for tag in record.tags)
         ):
             return f"record '{record.id}' has malformed tags"
         if any(tag != tag.strip().lower() for tag in record.tags):
@@ -107,7 +116,7 @@ def registry_shape_error(
             not isinstance(record.required_markers, tuple)
             or not record.required_markers
             or any(
-                not isinstance(label, str) or not label.strip()
+                not is_unicode_text(label) or not label.strip()
                 for label in record.required_markers
             )
         ):
@@ -135,7 +144,7 @@ def clean_labels(raw: object, field: str) -> tuple[frozenset[str], tuple[str, ..
     kept: set[str] = set()
     notes: list[str] = []
     for token in raw:
-        if not isinstance(token, str) or not token.strip():
+        if not is_unicode_text(token) or not token.strip():
             notes.append(f"ignored a malformed {field} label")
             continue
         kept.add(token.strip().lower())

@@ -12,7 +12,7 @@
   ],
   "license": "Apache-2.0",
   "access_right": "open",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "keywords": [
     "active inference",
     "governance",
@@ -73,5 +73,5 @@
       "scheme": "url"
     }
   ],
-  "notes": "One of ten related works (the Line Set family: eight instruments, the cross-line reader, and the witness register). The last verified version DOI, for an earlier edition, is 10.5281/zenodo.22833492. The 0.3.0 Zenodo version DOI remains Daniel's reserve-first follow-up; this metadata does not assert that the earlier DOI identifies the new version."
+  "notes": "Part of the Line Set family of independent instruments, its colorless Main reader, and the Witness Register outside LINE_SET; see the current Line Set declaration. Copper documents dimensioned finite-resource allocation arithmetic and burden attribution; Iron documents scenario-bound recorded recovery comparisons, not Green's learner-owned marker coverage. The last verified version DOI, for an earlier edition, is 10.5281/zenodo.22833492; it does not identify 0.4.0. The existing automatic GitHub-to-Zenodo integration was explicitly authorized on November 8, 2026; resulting archives still require verification under docs/publication.md."
 }

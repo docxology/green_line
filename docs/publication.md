@@ -1,4 +1,4 @@
-# Publication and reserve-first releases
+# Publication and versioned releases
 
 Release code only when the full suite meets its coverage floor, lint and
 type checks pass, examples replay and regenerate, registry/claim/formalism
@@ -19,15 +19,17 @@ The active DOI is the last verified version DOI already in CITATION and the
 manuscript config. It is not a DOI for a newly tagged version. Do not guess
 or reserve a DOI in source, and do not relabel an old DOI as the new version.
 
-Daniel performs the Zenodo step: create a new version of the existing record,
-reserve its DOI first, update the publication metadata and rendered edition
-with that reserved DOI, then deposit/publish the matching artifacts. Keep the
-existing DOI until that reservation is verified.
+Keep previously verified identifiers assigned to their historical editions.
+Manual reserve-first publication remains an alternative workflow; it is not a
+prerequisite for the explicitly authorized automatic integration below.
 
 After independent read-only audit, commit, create an annotated `vX.Y.Z` tag,
 and fast-forward push main and tag through the GitVault repository lease.
-Verify both with `git ls-remote`. Inspect GitHub hooks before creating a
-GitHub Release: any Zenodo webhook, or an inconclusive hook check, means no
-Release object. A Release on a linked repository could mint a permanent DOI
-outside this reserve-first procedure. An explicit empty hook list permits a
-GitHub Release using the packet as its notes.
+Verify both with `git ls-remote`. Inspect authenticated hooks immediately before
+creating a GitHub Release. On November 8, 2026, the owner authorized this campaign
+with the existing public repositories' Zenodo hooks left active. Retain those
+integrations and verify each resulting archive's repository, tag, version, and
+contents. Never prefill a DOI or amend an immutable tag to insert one learned
+afterward. Without explicit archive authority, a Zenodo hook or inconclusive
+inspection still blocks the Release. PyPI, private-source disclosure, and new
+private-sibling deposit automation remain unauthorized.

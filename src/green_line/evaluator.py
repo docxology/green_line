@@ -18,6 +18,7 @@ from dataclasses import replace
 
 from .intake import (
     clean_labels,
+    is_unicode_text,
     registry_shape_error,
     resolve_max_age,
     resolve_read_date,
@@ -109,6 +110,12 @@ def _read(
     max_age_days = resolve_max_age(max_observation_age_days)
     if not isinstance(instrument_id, str) or not instrument_id.strip():
         raise ValueError("instrument_id must be nonblank")
+    if not is_unicode_text(instrument_id):
+        raise ValueError("instrument_id must contain usable Unicode text")
+    if isinstance(registry_vocabulary, frozenset) and any(
+        isinstance(tag, str) and not is_unicode_text(tag) for tag in registry_vocabulary
+    ):
+        raise ValueError("registry_vocabulary must contain usable Unicode text")
     if registry_vocabulary != TAG_VOCABULARY and instrument_id == "green_line":
         raise ValueError("a different vocabulary requires an explicit instrument_id")
     if episode_policy not in ("combine_declared", "single_episode"):
@@ -127,7 +134,7 @@ def _read(
             "records must be an iterable of GreenRecord records"
         ) from exc
     notes: list[str] = []
-    if inputs.get("next_review") == {"malformed": True}:
+    if isinstance(inputs.get("next_review"), dict) and inputs["next_review"].get("malformed"):
         notes.append("malformed next_review was set aside; it cannot change marker coverage")
     shape_error = registry_shape_error(record_set, registry_vocabulary)
     registry_snapshot = ""

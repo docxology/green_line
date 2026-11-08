@@ -2,7 +2,7 @@
 
 This repository is standalone by contract. Every gate below runs with zero
 siblings present (no black_line, golden_line, white_line, red_line, line_set,
-silver_line, violet_line, blue_line or witness_register checkout):
+silver_line, violet_line, blue_line, copper_line, iron_line or witness_register checkout):
 
 ```bash
 uv sync

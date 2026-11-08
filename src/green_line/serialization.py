@@ -82,6 +82,11 @@ def replay_reading(report: str) -> GreenReading:
 
     try:
         payload = json.loads(report)
+        canonical_report = canonical_json(payload)
+        try:
+            canonical_report.encode("utf-8")
+        except UnicodeEncodeError as exc:
+            raise ValueError("native report contains unusable Unicode text") from exc
         if payload["schema_version"] != "green.native-reading/2.0":
             raise ValueError("unsupported native report schema; no implicit migration")
         context = payload["context"]
@@ -101,7 +106,7 @@ def replay_reading(report: str) -> GreenReading:
                            payload["read_as_of"], context["max_observation_age_days"],
                            frozenset(context["registry_vocabulary"]), context["instrument_id"],
                            snapshot, context["episode_policy"], context["undated_policy"])
-        if canonical_reading(reading) != canonical_json(payload):
+        if canonical_reading(reading) != canonical_report:
             raise ValueError("report differs from replayed derivation")
         return reading
     except (KeyError, TypeError, AttributeError) as exc:

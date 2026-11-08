@@ -28,11 +28,11 @@ identity; registry record order is not. Findings sort by record ID.
 Registry title and instruction wording are content, not decoration. The current
 American-English registry and worked-attempt description produce new registry,
 input, report, envelope, and provenance identities even where findings stay the
-same. The registry digest is the native content revision marker; schema 2.0,
-declaration policy 2.1, and scoring semantics are unchanged. Current reports pin
-evaluator 0.3.0. Retained historical 0.2.0 bundles require their original producer
-for replay; the current evaluator rejects that older identity rather than
-silently migrating or relabeling the report.
+same. The registry digest is the native content revision marker; schema 2.0 and
+declaration policy 2.1 remain unchanged. Current reports pin evaluator 0.4.0,
+including its malformed-Unicode intake behavior. Retained historical reports
+require their original producer for replay; the current evaluator rejects an
+older identity rather than silently migrating or relabeling the report.
 
 Description prose is not archived. Its trimmed-text digest and validity flag
 are enough for replay, since its wording does not affect marker matching.
@@ -44,11 +44,38 @@ forgets the content of malformed non-text tokens while retaining their
 malformed classification. Reports of invalid registries carry diagnostics
 but cannot replay a registry that could not be serialized.
 
+Strings containing surrogate code units are unusable Unicode, not replacement
+characters, literal backslash-u text, or valid non-BMP scalars. A malformed
+description blocks findings with `INVALID_DESCRIPTION`/`NEEDS_REWORK`. Its
+`description_digest` fingerprints canonical ASCII JSON with the sorted keys
+`{"code_units":[...],"schema":"green.rejected-text/1"}` using SHA-256; the
+integer code units describe the original complete string, not its trimmed form.
+Neither description prose nor those code units are published. Other malformed
+strings become `{"rejected_text_digest":"..."}` in normalized input under the
+same fingerprint rule. Distinct rejected strings retain deterministic input
+identities without leaking unencodable text.
+
+These tokens retain exclusion classifications through complete replay: labels
+are `MALFORMED_LABEL`, dates `INVALID_DATE`, and optional attribution/commentary
+`MALFORMED_METADATA`. Malformed plans retain a `malformed` flag and cannot add
+coverage. Usable labels retain counter-signal-before-metadata-before-date
+precedence. Valid strings keep the existing non-ASCII canonical bytes without
+repair, normalization, or global ASCII escaping. Instrument/vocabulary
+configuration with unusable Unicode raises explicitly; malformed registry text
+produces an `INVALID_REGISTRY` diagnostic without unsafe text echoes.
+Replay also rejects archives whose decoded strings contain surrogate code units
+before hashing or derivation, including archives that hide them in JSON escapes.
+Fingerprint tokens remain ordinary strict-UTF-8 JSON and need no raw-text decoder.
+
 Custom registries using the built-in vocabulary remain supported. A distinct
 vocabulary requires `registry_vocabulary=frozenset(...)` and a distinct
 `instrument_id`; both become replay context. Definitions must be lowercase
 and trimmed in matching fields, tags must belong to that vocabulary, and
 required markers must be unique. No definition is silently repaired.
+Native custom instruments, including valid non-ASCII identities, canonicalize
+and replay normally. The Green-only envelope producer rejects missing or foreign
+native context in both export profiles; a custom registry using the built-in
+vocabulary and `instrument_id="green_line"` remains exportable.
 
 Undated declarations remain current by default. Opt-in
 `undated_policy="dated_only"` excludes them with UNDATED_PROFILE dispositions;

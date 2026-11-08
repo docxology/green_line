@@ -23,6 +23,7 @@ import re
 from .model import GreenReading
 from .serialization import reading_digest, canonical_reading
 from .evidence import canonical_json, content_digest
+from .intake import is_unicode_text
 from .version import __version__
 
 #: The cross-instrument envelope shape this module exports.
@@ -85,13 +86,17 @@ def reading_envelope(
     ever point at the derivation that produced its status.
     """
 
+    if reading.context is None or reading.context.instrument_id != GREEN_LINE_ID:
+        raise ValueError("Green envelope export requires native instrument identity green_line")
     if isinstance(source_snapshot_refs, (str, bytes, Mapping)):
         raise TypeError("source_snapshot_refs must be a collection, not text, bytes or a mapping")
     refs = tuple(source_snapshot_refs)
-    if not all(isinstance(ref, str) and ref.strip() for ref in refs):
-        raise ValueError("source_snapshot_refs must be non-blank strings")
+    if not all(is_unicode_text(ref) and ref.strip() for ref in refs):
+        raise ValueError("source_snapshot_refs must be nonblank usable Unicode strings")
     if not isinstance(subject_id, str):
         raise TypeError("subject_id must be a string")
+    if not is_unicode_text(subject_id):
+        raise ValueError("subject_id must contain usable Unicode text")
     envelope = ReadingEnvelope(
         ENVELOPE_SCHEMA,
         GREEN_LINE_ID,
@@ -153,7 +158,7 @@ def validate_envelope(envelope: ReadingEnvelope, *, strict: bool = False) -> tup
         errors.append("unsupported envelope schema")
     if envelope.line_id != GREEN_LINE_ID:
         errors.append("foreign line_id")
-    if not isinstance(envelope.subject_id, str) or (
+    if not is_unicode_text(envelope.subject_id) or (
         envelope.subject_id and not envelope.subject_id.strip()
     ) or (strict and not envelope.subject_id):
         errors.append("subject_id must be text and nonblank for strict export")
@@ -173,7 +178,7 @@ def validate_envelope(envelope: ReadingEnvelope, *, strict: bool = False) -> tup
         errors.append("unsupported native_status")
     refs = envelope.source_snapshot_refs
     if (not isinstance(refs, tuple) or len(refs) > 32 or (strict and not refs)
-            or any(not isinstance(ref, str) or not ref.strip() or len(ref) > 2048 for ref in refs)):
+            or any(not is_unicode_text(ref) or not ref.strip() or len(ref) > 2048 for ref in refs)):
         errors.append("source_snapshot_refs must be a bounded tuple of nonblank references")
     if envelope.scope_and_nonclaims != SCOPE_AND_NONCLAIMS:
         errors.append("scope_and_nonclaims must preserve the Green boundary")
