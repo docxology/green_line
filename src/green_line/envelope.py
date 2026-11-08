@@ -87,9 +87,13 @@ def reading_envelope(
     """
 
     if reading.context is None or reading.context.instrument_id != GREEN_LINE_ID:
-        raise ValueError("Green envelope export requires native instrument identity green_line")
+        raise ValueError(
+            "Green envelope export requires native instrument identity green_line"
+        )
     if isinstance(source_snapshot_refs, (str, bytes, Mapping)):
-        raise TypeError("source_snapshot_refs must be a collection, not text, bytes or a mapping")
+        raise TypeError(
+            "source_snapshot_refs must be a collection, not text, bytes or a mapping"
+        )
     refs = tuple(source_snapshot_refs)
     if not all(is_unicode_text(ref) and ref.strip() for ref in refs):
         raise ValueError("source_snapshot_refs must be nonblank usable Unicode strings")
@@ -135,9 +139,7 @@ def canonical_envelope(envelope: ReadingEnvelope) -> str:
     )
 
 
-def envelope_matches_reading(
-    envelope: ReadingEnvelope, reading: GreenReading
-) -> bool:
+def envelope_matches_reading(envelope: ReadingEnvelope, reading: GreenReading) -> bool:
     """Return whether an envelope still points at exactly this reading."""
 
     return report_matches(envelope, reading)
@@ -152,43 +154,65 @@ def report_matches(envelope: ReadingEnvelope, reading: GreenReading) -> bool:
     )
 
 
-def validate_envelope(envelope: ReadingEnvelope, *, strict: bool = False) -> tuple[str, ...]:
+def validate_envelope(
+    envelope: ReadingEnvelope, *, strict: bool = False
+) -> tuple[str, ...]:
     errors = []
     if envelope.schema_version != ENVELOPE_SCHEMA:
         errors.append("unsupported envelope schema")
     if envelope.line_id != GREEN_LINE_ID:
         errors.append("foreign line_id")
-    if not is_unicode_text(envelope.subject_id) or (
-        envelope.subject_id and not envelope.subject_id.strip()
-    ) or (strict and not envelope.subject_id):
+    if (
+        not is_unicode_text(envelope.subject_id)
+        or (envelope.subject_id and not envelope.subject_id.strip())
+        or (strict and not envelope.subject_id)
+    ):
         errors.append("subject_id must be text and nonblank for strict export")
     try:
         if date.fromisoformat(envelope.review_date).isoformat() != envelope.review_date:
             raise ValueError("noncanonical date")
     except (ValueError, TypeError):
         errors.append("review_date must be an ISO date")
-    if not isinstance(envelope.registry_version, str) or not re.fullmatch(r"\d+\.\d+\.\d+", envelope.registry_version):
+    if not isinstance(envelope.registry_version, str) or not re.fullmatch(
+        r"\d+\.\d+\.\d+", envelope.registry_version
+    ):
         errors.append("registry_version must be a release version")
     for field in ("registry_digest", "report_ref"):
         value = getattr(envelope, field)
         if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
             errors.append(f"{field} must be a SHA-256 hex digest")
     from .enums import GrowthStatus
+
     if envelope.native_status not in tuple(s.value for s in GrowthStatus):
         errors.append("unsupported native_status")
     refs = envelope.source_snapshot_refs
-    if (not isinstance(refs, tuple) or len(refs) > 32 or (strict and not refs)
-            or any(not is_unicode_text(ref) or not ref.strip() or len(ref) > 2048 for ref in refs)):
-        errors.append("source_snapshot_refs must be a bounded tuple of nonblank references")
+    if (
+        not isinstance(refs, tuple)
+        or len(refs) > 32
+        or (strict and not refs)
+        or any(
+            not is_unicode_text(ref) or not ref.strip() or len(ref) > 2048
+            for ref in refs
+        )
+    ):
+        errors.append(
+            "source_snapshot_refs must be a bounded tuple of nonblank references"
+        )
     if envelope.scope_and_nonclaims != SCOPE_AND_NONCLAIMS:
         errors.append("scope_and_nonclaims must preserve the Green boundary")
     return tuple(errors)
 
 
 def provenance_digest(envelope: ReadingEnvelope, reading: GreenReading) -> str:
-    return content_digest(canonical_json({"schema_version": "green.provenance-bundle/1.0",
-                                          "envelope": json.loads(canonical_envelope(envelope)),
-                                          "report": json.loads(canonical_reading(reading))}))
+    return content_digest(
+        canonical_json(
+            {
+                "schema_version": "green.provenance-bundle/1.0",
+                "envelope": json.loads(canonical_envelope(envelope)),
+                "report": json.loads(canonical_reading(reading)),
+            }
+        )
+    )
 
 
 __all__ = [

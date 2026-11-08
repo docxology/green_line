@@ -8,8 +8,9 @@ from green_line import CultivationAttempt, read_cultivation, reading_envelope
 
 
 def reading():
-    return read_cultivation(CultivationAttempt("practice", frozenset({"research"})),
-                            as_of="2026-08-29")
+    return read_cultivation(
+        CultivationAttempt("practice", frozenset({"research"})), as_of="2026-08-29"
+    )
 
 
 @pytest.mark.parametrize("refs", ("abc", b"abc", {"abc": "def"}))
@@ -20,20 +21,29 @@ def test_g04_reference_containers_are_not_split(refs):
 
 def test_g04_report_identity_structure_and_provenance_are_distinct():
     from green_line.envelope import report_matches, validate_envelope, provenance_digest
+
     report = reading()
     envelope = reading_envelope(report, "subject", ("declared:source",))
     assert validate_envelope(envelope, strict=True) == ()
     digest = provenance_digest(envelope, report)
     mutations = {
-        "schema_version": "unexpected", "line_id": "another_line", "subject_id": "other",
-        "review_date": "2026-08-30", "registry_version": "99.0.0",
-        "registry_digest": "0" * 64, "native_status": "STAGED", "report_ref": "0" * 64,
-        "source_snapshot_refs": ("another",), "scope_and_nonclaims": (),
+        "schema_version": "unexpected",
+        "line_id": "another_line",
+        "subject_id": "other",
+        "review_date": "2026-08-30",
+        "registry_version": "99.0.0",
+        "registry_digest": "0" * 64,
+        "native_status": "STAGED",
+        "report_ref": "0" * 64,
+        "source_snapshot_refs": ("another",),
+        "scope_and_nonclaims": (),
     }
     for field, value in mutations.items():
         changed = replace(envelope, **{field: value})
-        assert (report_matches(changed, report) is
-                (field not in {"review_date", "registry_digest", "native_status", "report_ref"}))
+        assert report_matches(changed, report) is (
+            field
+            not in {"review_date", "registry_digest", "native_status", "report_ref"}
+        )
         if field in {"schema_version", "line_id", "scope_and_nonclaims"}:
             assert validate_envelope(changed)
         assert provenance_digest(changed, report) != digest
@@ -51,15 +61,28 @@ def test_g08_native_reports_exist_and_resolve():
         assert hashlib.sha256(report.read_bytes()).hexdigest() == envelope["report_ref"]
 
 
-@pytest.mark.parametrize("field, value", (
-    ("subject_id", None), ("subject_id", "  "), ("review_date", "yesterday"),
-    ("review_date", None), ("review_date", "20260829"), ("registry_version", "dev"), ("registry_version", None),
-    ("registry_digest", "invalid"), ("report_ref", None), ("native_status", "APPROVED"),
-    ("source_snapshot_refs", "abc"), ("source_snapshot_refs", ("",)),
-    ("source_snapshot_refs", ("x" * 2049,)), ("source_snapshot_refs", ("x",) * 33),
-))
+@pytest.mark.parametrize(
+    "field, value",
+    (
+        ("subject_id", None),
+        ("subject_id", "  "),
+        ("review_date", "yesterday"),
+        ("review_date", None),
+        ("review_date", "20260829"),
+        ("registry_version", "dev"),
+        ("registry_version", None),
+        ("registry_digest", "invalid"),
+        ("report_ref", None),
+        ("native_status", "APPROVED"),
+        ("source_snapshot_refs", "abc"),
+        ("source_snapshot_refs", ("",)),
+        ("source_snapshot_refs", ("x" * 2049,)),
+        ("source_snapshot_refs", ("x",) * 33),
+    ),
+)
 def test_g04_each_invalid_field_is_rejected(field, value):
     from green_line import validate_envelope
+
     envelope = reading_envelope(reading(), "subject", ("declared:source",))
     assert validate_envelope(replace(envelope, **{field: value}))
 
@@ -77,7 +100,11 @@ def test_foreign_native_instrument_replays_but_cannot_export_as_green(
     strict, instrument_id
 ):
     from green_line import (
-        GreenRecord, GrowthStatus, Observation, canonical_reading, reading_digest,
+        GreenRecord,
+        GrowthStatus,
+        Observation,
+        canonical_reading,
+        reading_digest,
         replay_reading,
     )
     from green_line.envelope import report_matches
@@ -87,7 +114,8 @@ def test_foreign_native_instrument_replays_but_cannot_export_as_green(
     )
     native = read_cultivation(
         CultivationAttempt(
-            "private farm practice", record.tags,
+            "private farm practice",
+            record.tags,
             dated_observations=(Observation("mentor", "2026-08-29"),),
         ),
         (record,),
@@ -124,18 +152,27 @@ def test_missing_native_identity_cannot_be_inferred_from_green_shape(strict):
 
 def test_green_identity_with_nonstandard_registry_still_exports_and_replays():
     from green_line import (
-        GreenRecord, GrowthStatus, Observation, canonical_envelope, canonical_reading,
-        replay_reading, validate_envelope,
+        GreenRecord,
+        GrowthStatus,
+        Observation,
+        canonical_envelope,
+        canonical_reading,
+        replay_reading,
+        validate_envelope,
     )
     from green_line.envelope import report_matches
 
     record = GreenRecord(
-        "local", "Práctice 🌱", "Record a local practice.",
-        frozenset({"research"}), ("mentor",),
+        "local",
+        "Práctice 🌱",
+        "Record a local practice.",
+        frozenset({"research"}),
+        ("mentor",),
     )
     native = read_cultivation(
         CultivationAttempt(
-            "private local practice", record.tags,
+            "private local practice",
+            record.tags,
             dated_observations=(Observation("mentor", "2026-08-29"),),
         ),
         (record,),
