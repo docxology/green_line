@@ -9,5 +9,5 @@
   prepared here; the line_set maintainer preserves its assigned working position.
 - `envelopes/` — historical 0.2.0 witness records and native reports exported
   through the public API. Preserve their bytes and producer provenance.
-  Generate the current 0.3.0 edition into `current-envelopes/0.3.0/` only after
+  Generate the current 0.4.0 edition into `current-envelopes/0.4.0/` only after
   committing its producer source; see `envelopes/README.md`.

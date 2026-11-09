@@ -39,7 +39,7 @@ After the producing source is committed, use a matching checkout and its actual
 full producer SHA. Choose a new empty destination outside this historical edition:
 
 ```bash
-uv run python scripts/gen_envelopes.py --output-dir data/current-envelopes/0.3.0 --source-commit <actual-producer-sha>
+uv run python scripts/gen_envelopes.py --output-dir data/current-envelopes/0.4.0 --source-commit <actual-producer-sha>
 ```
 
 Retain that edition's complete manifest, exact source hashes, registry/input/report/

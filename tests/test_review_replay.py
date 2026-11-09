@@ -206,3 +206,146 @@ def test_dated_replay_retains_every_declaration_and_fresh_marker_precedence():
         entry["commentary"] == "expert"
         for entry in payload["normalized_input"]["dated_observations"]
     )
+
+
+def test_valid_unicode_canonical_bytes_and_hashes_remain_unchanged_and_distinct():
+    import hashlib
+
+    from green_line import (
+        GrowthStatus,
+        NextReview,
+        canonical_registry,
+        reading_digest,
+        replay_reading,
+    )
+
+    texts = ("ASCII", "café", "🌱", "😀", "\ufffd", r"\ud800", r"\ud83d\ude00")
+    digests = set()
+    for text in texts:
+        label = text.lower()
+        record = GreenRecord("practice", text, text, frozenset({"research"}), (label,))
+        attempt = CultivationAttempt(
+            text,
+            record.tags,
+            dated_observations=(Observation(label, "2026-08-29", text, text, text),),
+            next_review=NextReview(text, text, "2026-09-01", text),
+        )
+        reading = read_cultivation(attempt, (record,), as_of="2026-08-29")
+        assert reading.status is GrowthStatus.STAGED
+        assert reading.scope_reason == "APPLIED"
+        assert reading.intake_notes == ()
+        assert reading.marker_surfaces[0].present == (label,)
+        assert reading.marker_surfaces[0].missing == ()
+        expected_input = {
+            "description_valid": True,
+            "description_digest": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+            "tags": ["research"],
+            "observations": [],
+            "dated_observations": [
+                {
+                    "label": label,
+                    "noted_on": "2026-08-29",
+                    "source_ref": text,
+                    "episode_id": text,
+                    "commentary": text,
+                }
+            ],
+            "next_review": {
+                "next_practice_step": text,
+                "review_question": text,
+                "review_on": "2026-09-01",
+                "evidence_would_change": text,
+            },
+        }
+        expected_input_bytes = json.dumps(
+            expected_input, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
+        expected_registry_bytes = json.dumps(
+            [
+                {
+                    "id": "practice",
+                    "title": text,
+                    "wire": text,
+                    "tags": ["research"],
+                    "required_markers": [label],
+                    "kind": "PRACTICE",
+                }
+            ],
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        assert reading.normalized_input.encode("utf-8") == expected_input_bytes
+        assert (
+            reading.context.input_digest
+            == hashlib.sha256(expected_input_bytes).hexdigest()
+        )
+        assert reading.registry_snapshot.encode("utf-8") == expected_registry_bytes
+        assert canonical_registry((record,)).encode("utf-8") == expected_registry_bytes
+        assert (
+            reading.registry_digest
+            == hashlib.sha256(expected_registry_bytes).hexdigest()
+        )
+        report = canonical_reading(reading)
+        assert (
+            reading_digest(reading)
+            == hashlib.sha256(report.encode("utf-8")).hexdigest()
+        )
+        assert json.dumps(json.loads(report), ensure_ascii=False).encode("utf-8")
+        assert canonical_reading(replay_reading(report)) == report
+        assert (
+            canonical_reading(read_cultivation(attempt, (record,), as_of="2026-08-29"))
+            == report
+        )
+        digests.add(reading.context.input_digest)
+    assert len(digests) == len(texts)
+
+    # Hold all other declaration fields fixed: different description identities
+    # must not be an incidental consequence of different metadata or plan text.
+    descriptions = (*texts, "\ud800", "\ud801", "\ud83d\ude00")
+    description_digests, description_reports = set(), set()
+    for text in descriptions:
+        attempt = CultivationAttempt(
+            text,
+            frozenset({"research"}),
+            dated_observations=(Observation("mentor", "2026-08-29"),),
+        )
+        reading = read_cultivation(attempt, as_of="2026-08-29")
+        assert reading.scope_reason == (
+            "APPLIED" if text in texts else "INVALID_DESCRIPTION"
+        )
+        report = canonical_reading(reading)
+        assert canonical_reading(replay_reading(report)) == report
+        assert json.dumps(json.loads(report), ensure_ascii=False).encode("utf-8")
+        description_digests.add(reading.context.input_digest)
+        description_reports.add(report)
+    assert len(description_digests) == len(description_reports) == len(descriptions)
+
+
+def test_valid_unicode_custom_configuration_still_has_full_native_replay():
+    from green_line import GrowthStatus, replay_reading
+
+    record = GreenRecord(
+        "práctica🌱", "Práctica", "Révision 🌱", frozenset({"jardín🌱"}), ("témoin🌱",)
+    )
+    attempt = CultivationAttempt(
+        "private prose",
+        record.tags,
+        dated_observations=(Observation("témoin🌱", "2026-08-29"),),
+    )
+    reading, surfaces = read_with_surfaces(
+        attempt,
+        (record,),
+        as_of="2026-08-29",
+        registry_vocabulary=record.tags,
+        instrument_id="práctica🌱",
+    )
+    assert reading.status is GrowthStatus.STAGED
+    assert reading.scope_reason == "APPLIED"
+    assert reading.context.instrument_id == "práctica🌱"
+    assert reading.context.registry_vocabulary == ("jardín🌱",)
+    assert surfaces[0].present == ("témoin🌱",)
+    report = canonical_reading(reading)
+    assert "private prose" not in report
+    assert json.dumps(json.loads(report), ensure_ascii=False).encode("utf-8")
+    assert canonical_reading(replay_reading(report)) == report

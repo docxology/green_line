@@ -56,10 +56,11 @@ Publication follows the [reserve-first procedure](docs/publication.md).
 
 ## The Line Set
 
-This work is one of ten in the Line Set family — eight instruments, their
-cross-line reader, and the witness register that co-registers their report
-envelopes without aggregation. Sources may be optional or access-controlled;
-the declared roster does not promise public availability:
+This instrument belongs to the [current Line Set declaration](https://github.com/docxology/line_set),
+whose colorless Main reader holds the instruments apart. The Witness Register
+is outside `LINE_SET` and co-registers report envelopes without aggregation.
+Sources may be optional or access-controlled; the roster does not promise public
+availability:
 
 - [Black Line](https://github.com/docxology/black_line) — the practice registry of realized craft
 - [Golden Line](https://github.com/docxology/golden_line) — the aspiration and horizon registry
@@ -68,5 +69,7 @@ the declared roster does not promise public availability:
 - [Silver Line](https://github.com/docxology/silver_line) — the memory-and-succession instrument
 - Violet Line — the consent ledger of affected parties; source access may be restricted
 - [Blue Line](https://github.com/docxology/blue_line) — the stewardship instrument for maintained commitments
+- Copper Line — dimensioned finite-resource allocation arithmetic and burden attribution, not learner progress or permission; source access may be restricted
+- Iron Line — scenario-bound recorded recovery comparisons, not competence, reliability, or permission certification; source access may be restricted
 - [The Line Set](https://github.com/docxology/line_set) — the cross-line set reader holding instruments apart
 - [The Witness Register](https://github.com/docxology/witness_register) — co-registration without aggregation

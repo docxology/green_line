@@ -4,12 +4,13 @@
 
 A read proceeds in three stages:
 
-1. **Intake** (`green_line.intake`). Input is normalized fail-closed: blank
-   descriptions are blocking defects; malformed labels and unreadable or
-   future-dated observations become set-aside notes; counter-signal labels
-   (certification, credential, resume language) are staged aside with an
-   explanatory note and never counted. Nothing crashes on hostile input and
-   no value is invented.
+1. **Intake** (`green_line.intake`). Input is normalized fail-closed before
+   hashing: blank descriptions and strings containing surrogate code units
+   are blocking defects; malformed labels and unreadable or future-dated
+   observations become set-aside notes. Counter-signal labels (certification,
+   credential, resume language) are staged aside and never counted. Supported
+   malformed declarations produce diagnostics rather than encoding failures;
+   invalid review configuration raises explicitly. No value is invented.
    Ordinary and dated observations share the same lexical exclusion rule;
    tags are normalized separately. Registry matching fields must already be
    lowercase and trimmed, required markers unique, and tags in the declared
@@ -38,6 +39,10 @@ digest of both the reading and the registry that produced it.
 The native report stores a versioned context including the freshness window
 and policy identity. Description prose remains restricted to its owner; a
 digest and validity flag are archived, without proving authorship or truth.
+Unusable Unicode retains an opaque fingerprint of its original code units,
+not replacement text or protected description prose. Normalized exclusions
+and malformed-plan flags survive complete native replay. Valid non-ASCII
+strings retain their canonical UTF-8 bytes; no global ASCII escaping is applied.
 
 ## Typed scope and learner-owned review
 

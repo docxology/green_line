@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.4.0 — 2026-11-08
+
+- Reject foreign or missing native instrument context at the Green-only envelope
+  producer in both ordinary and strict profiles. Custom native instruments still
+  read and replay; Green custom registries and pointer-only matching remain valid.
+- Classify unusable Unicode before normalized-input hashing. Retain deterministic
+  rejected-text fingerprints without publishing protected description prose or
+  code units; replay complete exclusions, diagnostics, context, and findings.
+- Preserve strict UTF-8, valid non-ASCII canonical encodings, registry content,
+  lexical screening, and metadata/date precedence. Reject unusable Unicode in
+  instrument/vocabulary configuration and set aside malformed registry text.
+- Advance the behavior release to 0.4.0 without relabeling historical artifacts.
+  Distinguish Copper's allocation arithmetic and Iron's scenario-bound recorded
+  recovery comparisons from Green's learner-owned marker coverage.
+
 ## 0.3.0 — 2026-11-06
 
 - Emit figure registry 2.0 with canonical `alt_text`, including cover metadata.

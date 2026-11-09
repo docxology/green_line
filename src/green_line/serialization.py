@@ -46,8 +46,12 @@ def canonical_reading(reading: GreenReading) -> str:
         "registry_digest": reading.registry_digest,
         "intake_notes": list(reading.intake_notes),
         "context": asdict(reading.context) if reading.context else None,
-        "normalized_input": json.loads(reading.normalized_input) if reading.normalized_input else None,
-        "registry_snapshot": json.loads(reading.registry_snapshot) if reading.registry_snapshot else None,
+        "normalized_input": json.loads(reading.normalized_input)
+        if reading.normalized_input
+        else None,
+        "registry_snapshot": json.loads(reading.registry_snapshot)
+        if reading.registry_snapshot
+        else None,
         "intake_dispositions": [asdict(d) for d in reading.intake_dispositions],
         "marker_surfaces": [asdict(s) for s in reading.marker_surfaces],
         "marker_evidence": [asdict(e) for e in reading.marker_evidence],
@@ -82,26 +86,48 @@ def replay_reading(report: str) -> GreenReading:
 
     try:
         payload = json.loads(report)
+        canonical_report = canonical_json(payload)
+        try:
+            canonical_report.encode("utf-8")
+        except UnicodeEncodeError as exc:
+            raise ValueError("native report contains unusable Unicode text") from exc
         if payload["schema_version"] != "green.native-reading/2.0":
             raise ValueError("unsupported native report schema; no implicit migration")
         context = payload["context"]
-        if (context["policy_version"] != POLICY_VERSION
-                or context["counter_signal_policy_digest"] != policy_digest()
-                or context["evaluator_version"] != __version__):
+        if (
+            context["policy_version"] != POLICY_VERSION
+            or context["counter_signal_policy_digest"] != policy_digest()
+            or context["evaluator_version"] != __version__
+        ):
             raise ValueError("unsupported evaluator or policy identity")
         snapshot = canonical_json(payload["normalized_input"])
         if content_digest(snapshot) != context["input_digest"]:
             raise ValueError("normalized input digest mismatch")
         if payload["registry_snapshot"] is None:
             raise ValueError("invalid registry reports have no replayable registry")
-        records = tuple(GreenRecord(row["id"], row["title"], row["wire"],
-                                    frozenset(row["tags"]), tuple(row["required_markers"]),
-                                    GrowthKind(row["kind"])) for row in payload["registry_snapshot"])
-        reading, _ = _read(CultivationAttempt("digest-only replay"), records,
-                           payload["read_as_of"], context["max_observation_age_days"],
-                           frozenset(context["registry_vocabulary"]), context["instrument_id"],
-                           snapshot, context["episode_policy"], context["undated_policy"])
-        if canonical_reading(reading) != canonical_json(payload):
+        records = tuple(
+            GreenRecord(
+                row["id"],
+                row["title"],
+                row["wire"],
+                frozenset(row["tags"]),
+                tuple(row["required_markers"]),
+                GrowthKind(row["kind"]),
+            )
+            for row in payload["registry_snapshot"]
+        )
+        reading, _ = _read(
+            CultivationAttempt("digest-only replay"),
+            records,
+            payload["read_as_of"],
+            context["max_observation_age_days"],
+            frozenset(context["registry_vocabulary"]),
+            context["instrument_id"],
+            snapshot,
+            context["episode_policy"],
+            context["undated_policy"],
+        )
+        if canonical_reading(reading) != canonical_report:
             raise ValueError("report differs from replayed derivation")
         return reading
     except (KeyError, TypeError, AttributeError) as exc:

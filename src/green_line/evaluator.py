@@ -18,6 +18,7 @@ from dataclasses import replace
 
 from .intake import (
     clean_labels,
+    is_unicode_text,
     registry_shape_error,
     resolve_max_age,
     resolve_read_date,
@@ -35,7 +36,13 @@ from .registry import GREEN_RECORDS
 from .registry import TAG_VOCABULARY
 from .serialization import canonical_registry, registry_digest
 from .records import EvaluationContext, MarkerEvidence
-from .evidence import POLICY_VERSION, content_digest, observation_dispositions, policy_digest, snapshot_input
+from .evidence import (
+    POLICY_VERSION,
+    content_digest,
+    observation_dispositions,
+    policy_digest,
+    snapshot_input,
+)
 from .version import __version__
 
 
@@ -109,26 +116,44 @@ def _read(
     max_age_days = resolve_max_age(max_observation_age_days)
     if not isinstance(instrument_id, str) or not instrument_id.strip():
         raise ValueError("instrument_id must be nonblank")
+    if not is_unicode_text(instrument_id):
+        raise ValueError("instrument_id must contain usable Unicode text")
+    if isinstance(registry_vocabulary, frozenset) and any(
+        isinstance(tag, str) and not is_unicode_text(tag) for tag in registry_vocabulary
+    ):
+        raise ValueError("registry_vocabulary must contain usable Unicode text")
     if registry_vocabulary != TAG_VOCABULARY and instrument_id == "green_line":
         raise ValueError("a different vocabulary requires an explicit instrument_id")
     if episode_policy not in ("combine_declared", "single_episode"):
         raise ValueError("unsupported episode_policy")
     if undated_policy not in ("current", "dated_only"):
         raise ValueError("unsupported undated_policy")
-    snapshot = normalized_input if normalized_input is not None else snapshot_input(attempt)
+    snapshot = (
+        normalized_input if normalized_input is not None else snapshot_input(attempt)
+    )
     inputs = json.loads(snapshot)
-    context = EvaluationContext(max_age_days, __version__, POLICY_VERSION, policy_digest(),
-                                content_digest(snapshot), instrument_id,
-                                tuple(sorted(registry_vocabulary)), episode_policy, undated_policy)
+    context = EvaluationContext(
+        max_age_days,
+        __version__,
+        POLICY_VERSION,
+        policy_digest(),
+        content_digest(snapshot),
+        instrument_id,
+        tuple(sorted(registry_vocabulary)),
+        episode_policy,
+        undated_policy,
+    )
     try:
         record_set = tuple(records)
     except TypeError as exc:
-        raise TypeError(
-            "records must be an iterable of GreenRecord records"
-        ) from exc
+        raise TypeError("records must be an iterable of GreenRecord records") from exc
     notes: list[str] = []
-    if inputs.get("next_review") == {"malformed": True}:
-        notes.append("malformed next_review was set aside; it cannot change marker coverage")
+    if isinstance(inputs.get("next_review"), dict) and inputs["next_review"].get(
+        "malformed"
+    ):
+        notes.append(
+            "malformed next_review was set aside; it cannot change marker coverage"
+        )
     shape_error = registry_shape_error(record_set, registry_vocabulary)
     registry_snapshot = ""
     if shape_error:
@@ -154,7 +179,10 @@ def _read(
                 tuple(notes),
                 read_date.isoformat(),
                 method_digest,
-                context, snapshot, registry_snapshot, scope_reason="INVALID_REGISTRY",
+                context,
+                snapshot,
+                registry_snapshot,
+                scope_reason="INVALID_REGISTRY",
             ),
             (),
         )
@@ -165,19 +193,40 @@ def _read(
         )
     tags, tag_notes = clean_labels(inputs["tags"], "tag")
     notes.extend(tag_notes)
-    dispositions = observation_dispositions(inputs, read_date, max_age_days,
-                                            frozenset(m for r in record_set for m in r.required_markers))
+    dispositions = observation_dispositions(
+        inputs,
+        read_date,
+        max_age_days,
+        frozenset(m for r in record_set for m in r.required_markers),
+    )
     if undated_policy == "dated_only":
-        dispositions = tuple(replace(d, disposition="excluded", reason_code="UNDATED_PROFILE",
-                                     note="undated declaration was set aside under dated_only")
-                             if d.disposition == "accepted" and d.noted_on is None else d
-                             for d in dispositions)
+        dispositions = tuple(
+            replace(
+                d,
+                disposition="excluded",
+                reason_code="UNDATED_PROFILE",
+                note="undated declaration was set aside under dated_only",
+            )
+            if d.disposition == "accepted" and d.noted_on is None
+            else d
+            for d in dispositions
+        )
     if episode_policy == "single_episode":
-        episodes = {d.episode_id for d in dispositions if d.disposition in ("accepted", "stale")}
+        episodes = {
+            d.episode_id for d in dispositions if d.disposition in ("accepted", "stale")
+        }
         if len(episodes) > 1:
-            dispositions = tuple(replace(d, disposition="excluded", reason_code="EPISODE_CONFLICT",
-                                         note="multiple declared episodes cannot be combined under single_episode")
-                                 if d.disposition in ("accepted", "stale") else d for d in dispositions)
+            dispositions = tuple(
+                replace(
+                    d,
+                    disposition="excluded",
+                    reason_code="EPISODE_CONFLICT",
+                    note="multiple declared episodes cannot be combined under single_episode",
+                )
+                if d.disposition in ("accepted", "stale")
+                else d
+                for d in dispositions
+            )
     notes.extend(d.note for d in dispositions if d.note)
     if blocking:
         return (
@@ -187,29 +236,68 @@ def _read(
                 tuple(notes),
                 read_date.isoformat(),
                 method_digest,
-                context, snapshot, registry_snapshot, dispositions,
+                context,
+                snapshot,
+                registry_snapshot,
+                dispositions,
                 scope_reason="INVALID_DESCRIPTION",
             ),
             (),
         )
-    fresh = frozenset(d.label for d in dispositions if d.disposition == "accepted" and d.label is not None)
-    stale = frozenset(d.label for d in dispositions if d.disposition == "stale" and d.label is not None)
+    fresh = frozenset(
+        d.label
+        for d in dispositions
+        if d.disposition == "accepted" and d.label is not None
+    )
+    stale = frozenset(
+        d.label
+        for d in dispositions
+        if d.disposition == "stale" and d.label is not None
+    )
     observations_declared = bool(fresh or stale)
     surfaces = tuple(
-        _surfaces(record, fresh, stale)
-        for record in record_set
-        if record.tags & tags
+        _surfaces(record, fresh, stale) for record in record_set if record.tags & tags
     )
-    findings = tuple(replace(_finding(item, observations_declared), declaration_relevance=(
-        "FRESH_REQUIRED" if item.present else "STALE_REQUIRED" if item.stale
-        else "UNRELATED_ONLY" if observations_declared else "NO_COUNTED_DECLARATIONS"))
-        for item in surfaces)
-    evidence = tuple(MarkerEvidence(s.record_id, label,
-                                   "present" if label in s.present else "stale" if label in s.stale else "missing",
-                                   tuple(d for d in dispositions if d.label == label))
-                     for s in surfaces for label in (*s.present, *s.missing))
-    scope = ("EMPTY_REGISTRY" if not record_set else "MALFORMED_TAGS" if tag_notes
-             else "NO_TAGS" if not tags else "APPLIED" if findings else "UNMATCHED_TAGS")
+    findings = tuple(
+        replace(
+            _finding(item, observations_declared),
+            declaration_relevance=(
+                "FRESH_REQUIRED"
+                if item.present
+                else "STALE_REQUIRED"
+                if item.stale
+                else "UNRELATED_ONLY"
+                if observations_declared
+                else "NO_COUNTED_DECLARATIONS"
+            ),
+        )
+        for item in surfaces
+    )
+    evidence = tuple(
+        MarkerEvidence(
+            s.record_id,
+            label,
+            "present"
+            if label in s.present
+            else "stale"
+            if label in s.stale
+            else "missing",
+            tuple(d for d in dispositions if d.label == label),
+        )
+        for s in surfaces
+        for label in (*s.present, *s.missing)
+    )
+    scope = (
+        "EMPTY_REGISTRY"
+        if not record_set
+        else "MALFORMED_TAGS"
+        if tag_notes
+        else "NO_TAGS"
+        if not tags
+        else "APPLIED"
+        if findings
+        else "UNMATCHED_TAGS"
+    )
     return (
         GreenReading(
             _overall(findings),
@@ -217,7 +305,13 @@ def _read(
             tuple(notes),
             read_date.isoformat(),
             method_digest,
-            context, snapshot, registry_snapshot, dispositions, surfaces, evidence, scope,
+            context,
+            snapshot,
+            registry_snapshot,
+            dispositions,
+            surfaces,
+            evidence,
+            scope,
         ),
         surfaces,
     )
@@ -250,9 +344,16 @@ def read_cultivation(
       outcome ``OUTSIDE_SCOPE``, not an exception.
     """
 
-    reading, _surfaces_unused = _read(attempt, records, as_of, max_observation_age_days,
-                                     registry_vocabulary, instrument_id, episode_policy=episode_policy,
-                                     undated_policy=undated_policy)
+    reading, _surfaces_unused = _read(
+        attempt,
+        records,
+        as_of,
+        max_observation_age_days,
+        registry_vocabulary,
+        instrument_id,
+        episode_policy=episode_policy,
+        undated_policy=undated_policy,
+    )
     return reading
 
 
@@ -277,6 +378,13 @@ def read_with_surfaces(
     declaration coverage only — never quality, mastery, or certification.
     """
 
-    return _read(attempt, records, as_of, max_observation_age_days,
-                 registry_vocabulary, instrument_id, episode_policy=episode_policy,
-                 undated_policy=undated_policy)
+    return _read(
+        attempt,
+        records,
+        as_of,
+        max_observation_age_days,
+        registry_vocabulary,
+        instrument_id,
+        episode_policy=episode_policy,
+        undated_policy=undated_policy,
+    )
