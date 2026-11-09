@@ -38,8 +38,8 @@ Historical byte reproduction requires the matching source checkout and hashes,
 not just passing its SHA to today's generator. `--source-commit` labels the
 running source; it does not load or verify a historical checkout. Both
 `--source-commit` and `--output-dir` are required: no implicit HEAD declaration
-or historical output directory is selected. Generate 0.4.0 into
-`data/current-envelopes/0.4.0/` only after its producer source is committed,
+or historical output directory is selected. Generate 0.5.0 into
+`data/current-envelopes/0.5.0/` only after its producer source is committed,
 using that actual full SHA and a new empty destination; see
 the [edition recipe](../data/envelopes/README.md). The named same-subject fixture
 is used directly; `gap_list` is reference-only, not a scored declaration.

@@ -1,5 +1,20 @@
 # Publication and versioned releases
 
+## Source citation and archive objects
+
+Source edition **0.5.0**, dated November 9, 2026. Cite inspected source
+through <https://github.com/docxology/green_line> with its version and exact revision.
+A source declaration, GitHub Release, source archive, and rendered manuscript
+are separate objects; each needs its own publication and qualification evidence.
+
+Previously verified source archive: **0.4.0** /
+<https://doi.org/10.5281/zenodo.24069457>. This identifies that SOURCE ZIP only,
+not this later source or a standalone rendered manuscript. The older retained
+title/DOI reference (`10.5281/zenodo.22833492`) remains historical; its exact
+edition version is not established here.
+
+## Release procedure
+
 Release code only when the full suite meets its coverage floor, lint and
 type checks pass, examples replay and regenerate, registry/claim/formalism
 ledgers agree, figures build, and publication versions agree. Runtime remains
@@ -15,9 +30,9 @@ rendered outputs, and record whole-file checksums. Do not change the engine
 to make this release pass. Render failures block release and belong in the
 report. Keep artifacts and intermediates under GitVault in ignored `output/`.
 
-The active DOI is the last verified version DOI already in CITATION and the
-manuscript config. It is not a DOI for a newly tagged version. Do not guess
-or reserve a DOI in source, and do not relabel an old DOI as the new version.
+The current source is cited by repository until its exact edition/object is
+independently verified. Historical DOIs belong only to their earlier editions,
+not to this candidate's own CFF identifiers or active `publication.doi`.
 
 Keep previously verified identifiers assigned to their historical editions.
 Manual reserve-first publication remains an alternative workflow; it is not a
@@ -25,11 +40,14 @@ prerequisite for the explicitly authorized automatic integration below.
 
 After independent read-only audit, commit, create an annotated `vX.Y.Z` tag,
 and fast-forward push main and tag through the GitVault repository lease.
-Verify both with `git ls-remote`. Inspect authenticated hooks immediately before
-creating a GitHub Release. On November 8, 2026, the owner authorized this campaign
-with the existing public repositories' Zenodo hooks left active. Retain those
-integrations and verify each resulting archive's repository, tag, version, and
-contents. Never prefill a DOI or amend an immutable tag to insert one learned
-afterward. Without explicit archive authority, a Zenodo hook or inconclusive
-inspection still blocks the Release. PyPI, private-source disclosure, and new
-private-sibling deposit automation remain unauthorized.
+Verify remote main and the peeled tag against the authorized release commit.
+Inspect authenticated hooks immediately before creating a GitHub Release.
+The November 8, 2026 owner authorization covered that campaign's existing public
+Zenodo integrations; it is not blanket future authority. For a future
+owner-authorized release, retain the authorized existing public integration and
+verify each resulting archive's repository, tag, version, and contents.
+A reserved DOI is not a published deposit. Never prefill a DOI or amend an
+immutable tag to insert one learned afterward. Without explicit archive
+authority, a Zenodo hook or inconclusive inspection still blocks the Release.
+PyPI, private-source disclosure, and new private-sibling deposit automation
+remain unauthorized.

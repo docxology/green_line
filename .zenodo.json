@@ -12,7 +12,7 @@
   ],
   "license": "Apache-2.0",
   "access_right": "open",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "keywords": [
     "active inference",
     "governance",
@@ -73,5 +73,5 @@
       "scheme": "url"
     }
   ],
-  "notes": "Part of the Line Set family of independent instruments, its colorless Main reader, and the Witness Register outside LINE_SET; see the current Line Set declaration. Copper documents dimensioned finite-resource allocation arithmetic and burden attribution; Iron documents scenario-bound recorded recovery comparisons, not Green's learner-owned marker coverage. The last verified version DOI, for an earlier edition, is 10.5281/zenodo.22833492; it does not identify 0.4.0. The existing automatic GitHub-to-Zenodo integration was explicitly authorized on November 8, 2026; resulting archives still require verification under docs/publication.md."
+  "notes": "Source metadata for version 0.5.0; a source declaration is not a release or deposit receipt. Previously verified source archive: 0.4.0 / 10.5281/zenodo.24069457, identifying that SOURCE ZIP only, not a standalone manuscript or this source edition. Retained earlier edition: 10.5281/zenodo.22833492; exact version is not established here. Cite later source through its repository until its exact edition/object is independently verified. The existing public automatic integration was authorized on November 8, 2026; future publication requires current owner authority and actual archive verification under docs/publication.md. Main is the colorless reader and Witness remains outside LINE_SET. Copper allocation and Iron recovery are distinct from Green's learner-owned marker coverage."
 }

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.0 — 2026-11-09
+
+- Refuse declaration comparison when either reading is blocked by
+  `INVALID_DESCRIPTION` or `INVALID_REGISTRY`, before envelope validation and
+  marker subtraction. Blocked absence is not a declaration addition or removal.
+- Preserve comparisons between scored readings, including `NEEDS_REWORK`, with
+  existing subject, envelope correspondence, registry, policy, and chronology
+  requirements. Comparison remains reported-surface subtraction, not a new
+  common-applicability policy.
+- Document both date-policy dimensions and the blocked-versus-scored boundary.
+  Native statuses, schemas, canonical encodings, and historical artifacts retain
+  their existing identities.
+
 ## 0.4.0 — 2026-11-08
 
 - Reject foreign or missing native instrument context at the Green-only envelope

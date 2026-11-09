@@ -1,7 +1,7 @@
 paper:
   title: "Green Line: a capacity-under-development instrument"
-  version: "0.4.0"
-  date: "2026-11-08"
+  version: "0.5.0"
+  date: "2026-11-09"
   cover:
     image: "../../output/figures/green_line_cover.png"
 
@@ -12,7 +12,10 @@ authors:
     affiliation: "Active Inference Institute"
     corresponding: true
 publication:
-  doi: "10.5281/zenodo.22833492"
+  archived_version: "0.4.0"
+  archived_version_doi: "10.5281/zenodo.24069457"
+  doi_status: "Source edition 0.5.0 cited by repository; archived identifier is the 0.4.0 source ZIP only, not this manuscript"
+  repository_url: "https://github.com/docxology/green_line"
 keywords:
   - "active inference"
   - "governance"
@@ -30,4 +33,4 @@ metadata:
   license: "Apache-2.0"
   status: "living document — versioned and revisable"
   geometry: "left=0.33in,right=0.33in,top=0.55in,bottom=0.55in"
-  language: "en"
+  language: "en-US"

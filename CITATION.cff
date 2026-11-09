@@ -1,13 +1,30 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+message: "Cite proposed source version 0.5.0 through its repository. The references identify earlier editions, not this candidate or a standalone manuscript."
 title: "green_line: a capacity-under-development instrument"
 authors:
   - family-names: Friedman
     given-names: Daniel Ari
     orcid: "https://orcid.org/0000-0001-6232-9096"
-version: 0.4.0
-date-released: "2026-11-08"
+version: 0.5.0
+date-released: "2026-11-09"
 identifiers:
-  - type: doi
-    value: "10.5281/zenodo.22833492"
+  - type: url
+    value: "https://github.com/docxology/green_line"
 license: Apache-2.0
+repository-code: "https://github.com/docxology/green_line"
+references:
+  - type: software
+    title: "green_line: a capacity-under-development instrument"
+    authors:
+      - family-names: Friedman
+        given-names: Daniel Ari
+    doi: "10.5281/zenodo.22833492"
+    notes: "Retained earlier published edition; its exact version is not established here. Not an identifier for this candidate."
+  - type: software
+    title: "green_line: a capacity-under-development instrument"
+    version: "0.4.0"
+    authors:
+      - family-names: Friedman
+        given-names: Daniel Ari
+    doi: "10.5281/zenodo.24069457"
+    notes: "Previously verified source ZIP only; not a standalone rendered manuscript or this proposed edition."
