@@ -18,8 +18,16 @@ and unnamed episodes. It never guesses which episode to prefer.
 
 `compare_readings(earlier, earlier_envelope, later, later_envelope)` requires
 valid identified envelopes, matching native reports, the same subject,
-registry and evaluation policy, and chronological review dates. It returns
-pinned report references plus added, removed, refreshed and still-missing
+registry and evaluation policy (including both `episode_policy` and
+`undated_policy`), and chronological review dates. Both readings must be
+eligible for scoring: `INVALID_DESCRIPTION` and `INVALID_REGISTRY` are
+blocked reads and raise `ValueError`, not added or removed declarations.
+Retained accepted intake dispositions do not make a blocked read scored.
+This is not a status threshold: a scored `NEEDS_REWORK` reading remains
+comparable. Existing tag/applicability behavior is unchanged; comparisons
+still subtract the reported surfaces, without restricting them to a common
+applicable-record domain. It returns pinned report references plus added,
+removed, refreshed and still-missing
 record/marker pairs. A refreshed marker was previously stale or has an
 established later accepted declaration date, compared as a calendar date.
 An unknown date stays unknown: undated-to-dated is not evidence of refresh.

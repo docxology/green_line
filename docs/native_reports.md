@@ -22,14 +22,17 @@ identity; registry record order is not. Findings sort by record ID.
 - `registry_digest` identifies record content; vocabulary and instrument
   identity are separately retained in context.
 - Context records the window, evaluator version, lexical policy version and
-  digest, declared vocabulary, instrument ID, and episode policy. A different
-  window is visible even when it produces the same status.
+  digest, declared vocabulary, instrument ID, `episode_policy`, and
+  `undated_policy`. A different window or policy is visible even when it
+  produces the same status. Declaration comparisons require these context
+  policy values to match and reject blocked `INVALID_DESCRIPTION` and
+  `INVALID_REGISTRY` readings; see [practice records](practice_records.md).
 
 Registry title and instruction wording are content, not decoration. The current
 American-English registry and worked-attempt description produce new registry,
 input, report, envelope, and provenance identities even where findings stay the
 same. The registry digest is the native content revision marker; schema 2.0 and
-declaration policy 2.1 remain unchanged. Current reports pin evaluator 0.4.0,
+declaration policy 2.1 remain unchanged. Current reports pin evaluator 0.5.0,
 including its malformed-Unicode intake behavior. Retained historical reports
 require their original producer for replay; the current evaluator rejects an
 older identity rather than silently migrating or relabeling the report.
