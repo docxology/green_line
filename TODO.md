@@ -1,0 +1,5 @@
+# TODO
+
+## Workflowz review — 2026-11-10
+
+- [ ] **GL-001 (P2): Keep README's stated Python floor consistent with the Ruff target-version.** Evidence: `pyproject.toml:10` declares `requires-python = ">=3.11"`, `README.md:36` states "Installation and development require Python >=3.11", but `pyproject.toml:17` sets `target-version = "py310"`, so Ruff parses/lints for a grammar older than the declared floor and will not surface 3.11-only typing/syntax opportunities or catch 3.11-incompatible assumptions consistently. Outcome: Ruff's target version matches the declared minimum interpreter (py311), or a code comment/doc note explicitly justifies the mismatch. Acceptance probe (from repo root): `uv run ruff check src tests scripts` passes with `target-version = "py311"` in pyproject.toml, and `uv run python -c "import green_line; print(green_line.__version__)"` still imports cleanly. Dependencies/constraints: none; must keep `AGENTS.md:8-9` pure-stdlib runtime invariant and not change `requires-python` itself.
