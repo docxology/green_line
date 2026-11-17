@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="452" viewBox="0 0 960 452" role="img" aria-labelledby="t d">
+<title id="t">green_line — Capacity-Under-Development Record Flow</title>
+<desc id="d">Record flow from CultivationAttempt and dated Observations through lexical counter-signal staging and the 11-record growth registry to verdicts and envelopes.</desc>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 1.5L9 5L0 8.5z" fill="#64748b"/></marker></defs>
+<rect x="0" y="0" width="960" height="452" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<rect x="20" y="18" width="920" height="64" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<rect x="20" y="18" width="6" height="64" rx="3" fill="#059669"/>
+<text x="38" y="44" font-family="system-ui,sans-serif" font-size="17.5" font-weight="700" fill="#0f172a">green_line — Growth &amp; Staging Record Flow</text>
+<text x="38" y="66" font-family="system-ui,sans-serif" font-size="12" fill="#475569">What is still growing? Apprenticeships &amp; deliberate skills with counter-signal staging</text>
+<rect x="768" y="27" width="158" height="24" rx="12" fill="#d1fae5" stroke="#059669" stroke-width="1"/>
+<text x="847.0" y="43" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#065f46">v0.5.0 · stageless</text>
+<rect x="20" y="98" width="218" height="150" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+<rect x="20" y="98" width="218" height="5" rx="2.5" fill="#059669"/>
+<rect x="32" y="108" width="60" height="17" rx="8.5" fill="#ffffff" stroke="#059669" stroke-width="0.9"/>
+<text x="62.0" y="120" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#065f46">INPUTS</text>
+<text x="32" y="141" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#065f46">1. Cultivation Intake</text>
+<text x="32" y="160" font-family="ui-monospace,monospace" font-size="11" fill="#1e293b">CultivationAttempt record</text>
+<text x="32" y="178" font-family="ui-monospace,monospace" font-size="11" fill="#1e293b">Dated Observation entries</text>
+<text x="32" y="196" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">6 growth tag families</text>
+<text x="32" y="214" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">8 COUNTER_SIGNAL_PHRASES</text>
+<text x="32" y="232" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">Lexical screen -> set aside</text>
+<line x1="238" y1="173" x2="254" y2="173" stroke="#64748b" stroke-width="1.8" marker-end="url(#arr)"/>
+<rect x="256" y="98" width="218" height="150" rx="9" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
+<rect x="256" y="98" width="218" height="5" rx="2.5" fill="#0d9488"/>
+<rect x="268" y="108" width="75" height="17" rx="8.5" fill="#ffffff" stroke="#0d9488" stroke-width="0.9"/>
+<text x="305.5" y="120" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#115e59">REGISTER</text>
+<text x="268" y="141" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#115e59">2. Growth Registry</text>
+<text x="268" y="160" font-family="ui-monospace,monospace" font-size="11" fill="#1e293b">GREEN_RECORDS (11 items)</text>
+<text x="268" y="178" font-family="ui-monospace,monospace" font-size="11" fill="#1e293b">GrowthKind &amp; tag reach</text>
+<text x="268" y="196" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">Required learning markers</text>
+<text x="268" y="214" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">IntakeDisposition notes</text>
+<text x="268" y="232" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">SHA-256 registry_digest</text>
+<line x1="474" y1="173" x2="490" y2="173" stroke="#64748b" stroke-width="1.8" marker-end="url(#arr)"/>
+<rect x="492" y="98" width="218" height="150" rx="9" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+<rect x="492" y="98" width="218" height="5" rx="2.5" fill="#d97706"/>
+<rect x="504" y="108" width="75" height="17" rx="8.5" fill="#ffffff" stroke="#d97706" stroke-width="0.9"/>
+<text x="541.5" y="120" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#92400e">EVALUATE</text>
+<text x="504" y="141" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#92400e">3. Cultivation Reader</text>
+<text x="504" y="160" font-family="ui-monospace,monospace" font-size="11" fill="#1e293b">read_cultivation()</text>
+<text x="504" y="178" font-family="ui-monospace,monospace" font-size="11" fill="#1e293b">read_with_surfaces()</text>
+<text x="504" y="196" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">MarkerSurfaces &amp; age check</text>
+<text x="504" y="214" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">NextReview date horizon</text>
+<text x="504" y="232" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">compare_readings() diff</text>
+<line x1="710" y1="173" x2="726" y2="173" stroke="#64748b" stroke-width="1.8" marker-end="url(#arr)"/>
+<rect x="728" y="98" width="212" height="150" rx="9" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="728" y="98" width="212" height="5" rx="2.5" fill="#7c3aed"/>
+<rect x="740" y="108" width="67" height="17" rx="8.5" fill="#ffffff" stroke="#7c3aed" stroke-width="0.9"/>
+<text x="773.5" y="120" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#5b21b6">OUTPUTS</text>
+<text x="740" y="141" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#5b21b6">4. Verdicts &amp; Receipts</text>
+<text x="740" y="160" font-family="ui-monospace,monospace" font-size="11" fill="#1e293b">STAGED · NEEDS_MARKER</text>
+<text x="740" y="178" font-family="ui-monospace,monospace" font-size="11" fill="#1e293b">NEEDS_REWORK · OUTSIDE</text>
+<text x="740" y="196" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">replay_reading() check</text>
+<text x="740" y="214" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">reading &amp; provenance SHA</text>
+<text x="740" y="232" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">ReadingEnvelope 1.0</text>
+<text x="24" y="274" font-family="system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#065f46">STAGING SURFACES &amp; NON-CERTIFICATION BOUNDARIES</text>
+<rect x="20" y="286" width="218" height="102" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+<rect x="20" y="286" width="218" height="5" rx="2.5" fill="#059669"/>
+<text x="32" y="312" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#065f46">Lexical Screen</text>
+<rect x="171" y="296" width="57" height="18" rx="9" fill="#ffffff" stroke="#059669" stroke-width="0.9"/>
+<text x="199.5" y="308.5" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#065f46">INTAKE</text>
+<text x="32" y="336" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">Counter-signal labels staged</text>
+<text x="32" y="355" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">aside w/ note, never scored</text>
+<rect x="256" y="286" width="218" height="102" rx="9" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+<rect x="256" y="286" width="218" height="5" rx="2.5" fill="#d97706"/>
+<text x="268" y="312" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#92400e">Marker Windows</text>
+<rect x="393" y="296" width="71" height="18" rx="9" fill="#ffffff" stroke="#d97706" stroke-width="0.9"/>
+<text x="428.5" y="308.5" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#92400e">EVIDENCE</text>
+<text x="268" y="336" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">Evaluates observation age</text>
+<text x="268" y="355" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">against max_age_days at as_of</text>
+<rect x="492" y="286" width="218" height="102" rx="9" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="492" y="286" width="218" height="5" rx="2.5" fill="#7c3aed"/>
+<text x="504" y="312" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#5b21b6">Learner Diff</text>
+<rect x="643" y="296" width="57" height="18" rx="9" fill="#ffffff" stroke="#7c3aed" stroke-width="0.9"/>
+<text x="671.5" y="308.5" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#5b21b6">REPLAY</text>
+<text x="504" y="336" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">compare_readings tracks</text>
+<text x="504" y="355" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">review deltas over time</text>
+<rect x="728" y="286" width="212" height="102" rx="9" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+<rect x="728" y="286" width="212" height="5" rx="2.5" fill="#475569"/>
+<text x="740" y="312" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#1e293b">Not a Resume</text>
+<rect x="859" y="296" width="71" height="18" rx="9" fill="#ffffff" stroke="#475569" stroke-width="0.9"/>
+<text x="894.5" y="308.5" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#1e293b">BOUNDARY</text>
+<text x="740" y="336" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">STAGED is marker coverage,</text>
+<text x="740" y="355" font-family="system-ui,sans-serif" font-size="11.5" fill="#334155">never competence proof</text>
+<rect x="20" y="401" width="920" height="36" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="34" y="423.5" font-family="system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#334155">Standalone Contract: Stageless line by design; zero sibling or witness-register runtime imports.</text>
+<text x="926" y="423.5" text-anchor="end" font-family="ui-monospace,monospace" font-size="11" fill="#475569">line.report-envelope/1.0</text>
+</svg>

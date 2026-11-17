@@ -16,6 +16,8 @@ staged aside with a note, never scored; this is lexical screening, not intent de
 **Opus stage:** None — a stageless line is the designed outcome (all four
 classical stages are allocated; see line_set `docs/extensibility.md`).
 
+![green_line record-flow architecture: CultivationAttempt and dated Observation intake with counter-signal lexical staging, 11-record growth registry, cultivation surface reader, and STAGED / NEEDS_MARKER / NEEDS_REWORK / OUTSIDE_SCOPE verdicts and report envelopes](docs/assets/architecture-overview.svg)
+
 ## Usage
 
 ```python
