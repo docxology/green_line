@@ -17,7 +17,7 @@ jobs:
       - name: Install the system packages the suite requires
         run: sudo apt-get update && sudo apt-get install -y librsvg2-bin
 
-      - uses: astral-sh/setup-uv@v10.3.3
+      - uses: astral-sh/setup-uv@v10.4.0
 
       - name: Test
         run: uv run --frozen --no-progress pytest -q
