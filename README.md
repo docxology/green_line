@@ -20,6 +20,9 @@ classical stages are allocated; see line_set `docs/extensibility.md`).
 
 ## Usage
 
+Install the locked environment with `uv sync --locked` from the repository
+root, then run this example with `uv run python`.
+
 ```python
 from green_line import CultivationAttempt, Observation, read_cultivation
 
@@ -32,29 +35,20 @@ reading = read_cultivation(
     as_of="2026-08-29",
     max_observation_age_days=60,
 )
-print(reading.status.value)
+print(reading.status.value)  # NEEDS_REWORK
 ```
 
-Installation and development require Python >=3.11. STAGED records declared
-marker coverage only, not demonstrated skill, certification, or permission.
+Installation and development require Python 3.11 or later. `NEEDS_REWORK`
+here describes missing marker declarations for the selected records.
+`STAGED` describes full declared marker coverage at the review date.
 
-## Verify
+## Documentation
 
-```bash
-uv sync
-uv run pytest tests/ --cov=src --cov-report=term   # configured coverage floor: 90
-uv run ruff check src tests scripts
-uv run python scripts/build_figures.py
-```
-
-Standalone by contract: no sibling line, the reader, or the witness register
-is needed for any of these commands. See STANDALONE.md.
-
-Native reports retain replay context and typed marker evidence; see
-[native reports](docs/native_reports.md), [envelope checks](docs/envelopes.md),
-and [learner-owned review records](docs/practice_records.md). The
-[historical review implementation record](docs/review_20261020.md) traces the 0.2.0 changes.
-Publication follows the [reserve-first procedure](docs/publication.md).
+Start with the [documentation index](docs/README.md). It links to installation,
+verification, report and envelope contracts, and the pinned render commands.
+Read the [manuscript](docs/manuscript/README.md) for the method, worked examples,
+and limits. [Publication](docs/publication.md) identifies the source edition and
+its archive policy.
 
 ## The Line Set
 

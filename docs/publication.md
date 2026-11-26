@@ -24,9 +24,9 @@ dated `docs/releases/vX.Y.Z.md` packet, synchronized with CHANGELOG and all
 active version declarations. Historical subject versions and schema versions
 have separate meanings and are not rewritten.
 
-Render PDF and HTML from the final manuscript through an isolated export of
-`template`'s `origin/main`, pin its SHA in the release packet, inspect the
-rendered outputs, and record whole-file checksums. Do not change the engine
+Render PDF and HTML from the final manuscript using the
+[pinned workflow](development.md#render-and-validate-the-manuscript). Record
+the engine SHA, validation results, and whole-file checksums in the release packet. Do not change the engine
 to make this release pass. Render failures block release and belong in the
 report. Keep artifacts and intermediates under GitVault in ignored `output/`.
 

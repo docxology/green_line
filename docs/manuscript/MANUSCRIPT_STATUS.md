@@ -4,6 +4,6 @@
 - **Manuscript title:** Green Line: a capacity-under-development instrument
 - **Location:** `docs/manuscript/` in this repository, resolved from the repo
   root; no sibling checkout or external engine is needed to read it
-- **Type:** Active publication-target manuscript (7 section files)
+- **Type:** Active publication-target manuscript with numbered source sections
 - **Status file purpose:** Tracks publication-readiness of the manuscript
   content in this directory.
