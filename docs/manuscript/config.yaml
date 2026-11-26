@@ -4,6 +4,7 @@ paper:
   date: "2026-11-09"
   cover:
     image: "../../output/figures/green_line_cover.png"
+    alt: "A green line rises through solid markers and continues as a dashed line through hollow markers."
 
 authors:
   - name: "Daniel Ari Friedman"

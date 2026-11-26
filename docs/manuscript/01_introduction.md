@@ -2,7 +2,9 @@
 
 ## Question
 
-Green Line answers one question: *what is still growing?*
+Green Line answers one question: *what is still growing?* The implementation,
+registry, and replay rules are maintained together in the source
+repository [@green_line2026].
 
 ## Job
 
