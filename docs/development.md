@@ -74,8 +74,9 @@ project dependency. The committed uv lock pins the developer environment.
 
 Install Pandoc, the matching [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref/releases)
 filter, and XeLaTeX with the [pinned template's TeX prerequisites](https://github.com/docxology/template/blob/87704feae0a4490ef7dad9c931d268e8c30273c2/README.md#L565-L574).
-Run from a clean Green Line checkout. For release verification, use an
-isolated engine checkout and record its exact revision.
+Run from a clean Green Line checkout in a directory named `green_line`.
+For release verification, use an isolated engine checkout and record its
+exact revision.
 
 ```bash
 green_line_root="$(pwd)"
